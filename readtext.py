@@ -31,6 +31,12 @@ class ReadText(Screen):
         cursor.execute(sql_statement)
         self.text_db = str(cursor.fetchone()[0]).split()
 
+        sql_statement = f'SELECT text_position FROM texts WHERE text_id = {int(text_id)}'
+        cursor.execute(sql_statement)
+        self.text_position = cursor.fetchone()[0]
+        print(self.text_position)
+        self.update_status()
+
     def start_reading(self):
         self.reading_running = True
         self.text_position_progress = 0
@@ -74,26 +80,39 @@ class ReadText(Screen):
             self.text_position_progress = 0
             self.my_string = 'stoppedreading'
 
-    def save_data_db(self):
-        pass
+    def update_data_db(self):
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+
+        sql_statement = f'UPDATE texts SET text_position = {self.text_position} WHERE text_id = {int(self.text_id)}'
+        cursor.execute(sql_statement)
+
+        sql_statement = f'UPDATE texts SET text_progress = {self.progress} WHERE text_id = {int(self.text_id)}'
+        cursor.execute(sql_statement)
+
+        connection.commit()
 
     def stop_start(self):
         if self.reading_running:
             self.stop_reading()
+            self.update_data_db()
         else:
             self.start_reading()
 
     def go_backward(self):
         self.stop_reading()
+        # TO DO make sure that it doesn't go lower than 0
         self.text_position -= 10
         self.update_status()
 
     def go_forward(self):
         self.stop_reading()
+        # TO DO make sure that it doesn't go higher than max length
         self.text_position += 10
         self.update_status()
 
     def go_back(self):
         self.stop_reading()
+        self.update_data_db()
         self.manager.transition.direction = 'right'
         self.manager.current = 'mainscreen'

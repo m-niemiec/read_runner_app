@@ -37,8 +37,8 @@ class MainScreen(Screen):
         texts = self.cursor.fetchall()
 
         for text in texts:
-            item = TwoLineAvatarListItem(text=str(text[3]),
-                                         secondary_text=str(text[2]),
+            item = TwoLineAvatarListItem(text=str(text[5]),
+                                         secondary_text=f'{str(text[3])} Progress - {text[2]}',
                                          on_release=partial(self.select_text, text[0]))
 
             self.ids.container.add_widget(item)

@@ -1,0 +1,89 @@
+#:include readtext.kv
+
+ScreenManager:
+    MainScreen:
+    PreferencesScreen:
+    ReadText:
+
+<MainScreen>:
+    name: 'mainscreen'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: 'Read Runner'
+            left_action_items: [['menu', lambda x: navigation_drawer.set_state()]]
+            right_action_items: [['help-circle', lambda x: app.root.get_screen('mainscreen').show_instructions()]]
+            elevation: 10
+
+        ScrollView:
+            MDList:
+                id: container
+
+        MDBottomAppBar:
+            MDToolbar:
+                mode: "free-end"
+                left_action_items: [['book-open-variant', lambda x: app.root.get_screen('mainscreen').import_text()]]
+                right_action_items: [['plus', lambda x: app.root.get_screen('mainscreen').import_text()]]
+                icon: ''
+                icon_width: 0
+                icon_height: 0
+                elevation: 10
+
+    MDNavigationDrawer:
+        id: navigation_drawer
+        BoxLayout:
+            orientation: 'vertical'
+            padding: '10dp'
+
+            MDLabel:
+                text: 'Menu'
+                font_style: 'H4'
+                pos_hint: {'x': 0.35, 'y': 0.5}
+                size_hint_y: None
+
+            ScrollView:
+                MDList:
+                    TwoLineIconListItem:
+                        text: '[size=20dp]Help[/size]'
+                        secondary_text: '[size=13dp]Learn more about ReadRunner.[/size]'
+                        on_release: root.manager.current = 'preferencesscreen'
+                        IconLeftWidget:
+                            icon: "help-circle"
+
+                    TwoLineIconListItem:
+                        text: '[size=20dp]Preferences[/size]'
+                        secondary_text: '[size=13dp]Change various settings.[/size]'
+                        on_release: root.manager.current = 'preferencesscreen'
+                        IconLeftWidget:
+                            icon: "account-cog"
+
+                    TwoLineIconListItem:
+                        text: '[size=20dp]About[/size]'
+                        secondary_text: '[size=13dp]About this app and author.[/size]'
+                        on_release: root.manager.current = 'preferencesscreen'
+                        IconLeftWidget:
+                            icon: "information"
+
+                    TwoLineIconListItem:
+                        text: '[size=20dp]Exit[/size]'
+                        secondary_text: '[size=13dp]Close ReadRunner.[/size]'
+                        on_release: app.root.get_screen('mainscreen').close_app()
+                        IconLeftWidget:
+                            icon: "close-circle-outline"
+
+            MDLabel:
+                text: 'Quick tip:'
+                font_style: 'Subtitle1'
+                size_hint_y: None
+
+            MDLabel:
+                text: 'To import book or text press plus icon in bottom right on main screen.'
+                font_style: 'Subtitle1'
+                size_hint_y: None
+
+<PreferencesScreen>:
+    name: 'preferencesscreen'
+    MDLabel:
+        text: 'Test'

@@ -1,0 +1,33 @@
+<ReadText>:
+    name: 'readtext'
+    id: readtext
+
+    BoxLayout:
+        orientation: 'vertical'
+        id: boxlayout
+
+        MDToolbar:
+            title: 'Read Runner'
+            left_action_items: [['keyboard-backspace', lambda x: readtext.go_back()]]
+            elevation: 10
+
+        MDLabel:
+            id: text_word
+            text: readtext.my_string
+            pos_hint: {'x': 0.5, 'y': 0.5}
+            pos_hint_y: None
+
+        MDLabel:
+            text: readtext.progress_text
+            pos_hint: {'x': 0.5, 'y': 0.5}
+
+        MDProgressBar:
+            value: readtext.progress
+
+        MDBottomAppBar:
+            MDToolbar:
+                left_action_items: [['skip-backward', lambda x: readtext.go_backward()]]
+                right_action_items: [['skip-forward', lambda x: readtext.go_forward()]]
+                icon: 'play-pause'
+                on_action_button: readtext.stop_start()
+                elevation: 10

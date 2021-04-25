@@ -1,3 +1,5 @@
+
+
 <ReadText>:
     name: 'readtext'
     id: readtext
@@ -8,12 +10,12 @@
 
         MDToolbar:
             title: 'Read Runner'
-            left_action_items: [['keyboard-backspace', lambda x: readtext.go_back()]]
+            left_action_items: [['keyboard-backspace', lambda x: app.root.get_screen('mainscreen').readtext.go_back()]]
             elevation: 10
 
         MDLabel:
             id: text_word
-            text: readtext.my_string
+            text: 'thistest'
             pos_hint: {'x': 0.5, 'y': 0.5}
             pos_hint_y: None
 
@@ -26,8 +28,8 @@
 
         MDBottomAppBar:
             MDToolbar:
-                left_action_items: [['skip-backward', lambda x: readtext.go_backward()]]
-                right_action_items: [['skip-forward', lambda x: readtext.go_forward()]]
+                left_action_items: [['skip-backward', lambda x: app.root.get_screen('mainscreen').readtext.go_backward()]]
+                right_action_items: [['skip-forward', lambda x: app.root.get_screen('mainscreen').readtext.go_forward()]]
                 icon: 'play-pause'
-                on_action_button: readtext.stop_start()
+                on_action_button: app.root.get_screen('mainscreen').readtext.stop_start()
                 elevation: 10

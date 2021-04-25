@@ -21,6 +21,8 @@ class MainScreen(Screen):
     help_dialog = None
     connection = None
     cursor = None
+    text_id = None
+    readtext = None
 
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
@@ -65,12 +67,12 @@ class MainScreen(Screen):
         self.help_dialog.dismiss()
 
     def select_text(self, text_id, obj):
+        print(self)
         self.manager.transition.direction = 'left'
         self.manager.current = 'readtext'
-        print(text_id)
-        print(obj)
+        print(f'Passed ID - {text_id}')
 
-        ReadText(text_id=text_id)
+        self.readtext = ReadText(text_id=text_id)
 
     def close_app(self):
         # MDApp.get_running_app().stop()

@@ -13,6 +13,11 @@ from kivymd.uix.list import TwoLineAvatarListItem
 
 import helper_texts
 from readtext import ReadText
+from importtext import ImportText
+from kivy.utils import platform
+if platform == 'android':
+    from android.permissions import request_permissions, Permission
+    request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 Window.size = (360, 780)
 
@@ -51,7 +56,11 @@ class MainScreen(Screen):
 
     def import_text(self):
         print('import_text')
-        pass
+
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'importtext'
+
+        self.importtext = ImportText()
 
     def show_instructions(self):
         if not self.help_dialog:
@@ -67,16 +76,15 @@ class MainScreen(Screen):
         self.help_dialog.dismiss()
 
     def select_text(self, text_id, obj):
-        print(self)
         self.manager.transition.direction = 'left'
         self.manager.current = 'readtext'
-        print(f'Passed ID - {text_id}')
 
         self.readtext = ReadText(text_id=text_id)
 
     def close_app(self):
         # MDApp.get_running_app().stop()
-        ReadRunnerApp().get_running_app().stop()
+        # ReadRunnerApp().get_running_app().stop()
+        exit()
 
 
 class PreferencesScreen(Screen):
@@ -96,9 +104,6 @@ class ReadRunnerApp(MDApp):
 
         return screen
 
-    # def close_app(self):
-    #     ReadRunnerApp().stop()
-
 
 if __name__ == '__main__':
     ReadRunnerApp().run()
@@ -108,3 +113,4 @@ screen_manager = ScreenManager()
 screen_manager.add_widget(MainScreen(name='mainscreen'))
 screen_manager.add_widget(PreferencesScreen(name='preferencesscreen'))
 screen_manager.add_widget(ReadText(name='readtext'))
+screen_manager.add_widget(ImportText(name='importtext'))

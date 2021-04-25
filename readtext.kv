@@ -1,5 +1,3 @@
-
-
 <ReadText>:
     name: 'readtext'
     id: readtext
@@ -20,11 +18,13 @@
             pos_hint_y: None
 
         MDLabel:
-            text: readtext.progress_text
+            id: progress_text
+            text: ''
             pos_hint: {'x': 0.5, 'y': 0.5}
 
         MDProgressBar:
-            value: readtext.progress
+            id: progress_bar
+            value: 0
 
         MDBottomAppBar:
             MDToolbar:

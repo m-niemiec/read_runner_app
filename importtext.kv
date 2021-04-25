@@ -1,0 +1,37 @@
+#:import Clipboard kivy.core.clipboard.Clipboard
+#:set text2 ''
+
+<ImportText>:
+    name: 'importtext'
+    id: importtext
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            text: 'Copy text from clipboard'
+            font_style: 'H4'
+            on_release: app.root.get_screen('mainscreen').importtext.import_from_clipboard()
+
+        Button:
+            text: 'Import from file (.txt .pdf .mobi)'
+            font_style: 'H4'
+            on_release: app.root.get_screen('mainscreen').importtext.import_from_file()
+
+        MDTextField:
+            id: imported_text_title_field
+            multiline: False
+            hint_text: 'Title'
+            text: ''
+
+        MDTextField:
+            id: imported_text_author_field
+            multiline: False
+            hint_text: 'Author'
+            text: ''
+
+        MDTextField:
+            id: imported_text_field
+            multiline: True
+            hint_text: 'Preview of your text'
+            text: ''

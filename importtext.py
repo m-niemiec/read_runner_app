@@ -1,4 +1,6 @@
 import re
+import sqlite3
+import uuid
 
 from kivy.core.clipboard import Clipboard
 from kivy.properties import StringProperty
@@ -6,6 +8,11 @@ from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.filemanager import MDFileManager
+from kivymd.uix.menu import MDDropdownMenu
+from kivy.metrics import dp
+from kivy.properties import Clock
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
 
 
 class ImportText(Screen):
@@ -13,6 +20,7 @@ class ImportText(Screen):
     text = None
     manager_open = False
     file_manager = None
+    warning_dialog = None
 
     def import_from_clipboard(self):
         self.imported_text = Clipboard.paste()
@@ -57,7 +65,7 @@ class ImportText(Screen):
         with open(text_file_path, encoding='utf-8-sig') as file:
             new_text = file.readlines()
 
-        self.save_new_text_data(new_text)
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text
 
     def import_pdf_file(self, text_file_path):
         pass
@@ -65,6 +73,53 @@ class ImportText(Screen):
     def import_mobi_file(self, text_file_path):
         pass
 
-    def save_new_text_data(self, new_text):
-        print(new_text)
-        pass
+    # def select_text_type(self, text_type):
+    #     print(text_type)
+
+    def save_new_text(self):
+        text_title = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_title_field.text
+        text_author = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_author_field.text
+        text_body = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text
+
+        if text_title == '':
+            return self.show_instructions('Please add title.')
+
+        if text_body == '':
+            return self.show_instructions('Please add text.')
+
+        try:
+            text_type = MDApp.get_running_app().root.get_screen("importtext").imported_text_type
+        except AttributeError:
+            return self.show_instructions('Please select text type.')
+
+        new_id = str(uuid.uuid4()).replace('-', '')
+
+        print(text_title)
+        print(text_author)
+        print(text_body)
+        print(text_type)
+
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT * from texts WHERE text_id = ?', (new_id,))
+
+        if not cursor.fetchone():
+            cursor.execute('INSERT INTO texts VALUES (?, 0, 0, ?, ?, ?, ?)',
+                           (new_id, text_type, text_title, text_author, text_body[0]))
+        else:
+            self.save_new_text_data(self.save_new_text)
+
+        connection.commit()
+        connection.close()
+
+    def show_instructions(self, warning_text):
+        self.warning_dialog = MDDialog(
+            text=warning_text,
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
+            size_hint=(0.9, 0.8),
+            buttons=[MDFlatButton(text="CANCEL", on_release=self.close_help_dialog)])
+
+        self.warning_dialog.open()
+
+    def close_help_dialog(self, obj):
+        self.warning_dialog.dismiss()

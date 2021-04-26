@@ -1,5 +1,5 @@
 #:import Clipboard kivy.core.clipboard.Clipboard
-#:set text2 ''
+#:set imported_text_type 'Book'
 
 <ImportText>:
     name: 'importtext'
@@ -14,7 +14,7 @@
             on_release: app.root.get_screen('mainscreen').importtext.import_from_clipboard()
 
         Button:
-            text: 'Import from file (.txt .pdf .mobi)'
+            text: 'Import text from file (.txt .pdf .mobi)'
             font_style: 'H4'
             on_release: app.root.get_screen('mainscreen').importtext.import_from_file()
 
@@ -35,3 +35,28 @@
             multiline: True
             hint_text: 'Preview of your text'
             text: ''
+
+        MDLabel:
+            text: 'Select text type:'
+
+        GridLayout:
+            cols: 4
+
+            MDLabel:
+                text: 'Book'
+            MDCheckbox:
+                active: False
+                group: 'group'
+                on_active: root.imported_text_type = 'Book'
+
+            MDLabel:
+                text: 'Article'
+            MDCheckbox:
+                active: False
+                group: 'group'
+                on_active: root.imported_text_type = 'Article'
+
+        Button:
+            text: 'Save new Text!'
+            font_style: 'H4'
+            on_release: app.root.get_screen('mainscreen').importtext.save_new_text()

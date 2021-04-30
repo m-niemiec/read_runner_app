@@ -4,16 +4,21 @@ from functools import partial
 
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy.properties import Clock
+from kivy.properties import Clock, NumericProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
+from kivy.metrics import dp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import TwoLineAvatarListItem
+from kivymd.uix.list import TwoLineAvatarListItem, IconLeftWidget, IconRightWidget
+from kivymd.uix.list import ThreeLineAvatarIconListItem
+from kivymd.icon_definitions import md_icons
+from kivymd.uix.menu import MDDropdownMenu
 
 import helper_texts
 from readtext import ReadText
 from importtext import ImportText
+from textsubmenu import TextSubMenu
 from kivy.utils import platform
 if platform == 'android':
     from android.permissions import request_permissions, Permission
@@ -28,6 +33,8 @@ class MainScreen(Screen):
     cursor = None
     text_id = None
     readtext = None
+    menu = None
+    text_sub_menu_dialog = None
 
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
@@ -44,15 +51,23 @@ class MainScreen(Screen):
         texts = self.cursor.fetchall()
 
         for text in texts:
-            item = TwoLineAvatarListItem(text=str(text[5]),
-                                         secondary_text=f'{str(text[3])} Progress - {text[2]}',
-                                         on_release=partial(self.select_text, text[0]))
+            icon_left = IconLeftWidget(icon='book-open-variant' if text[3] == 'Book' else 'note-text-outline',
+                                       on_release=partial(self.select_text, text[0]))
+            icon_right = IconRightWidget(icon='dots-vertical', on_release=partial(self.show_text_sub_menu, text[0]))
+            item = ThreeLineAvatarIconListItem(text=str(text[5]),
+                                               secondary_text=str(text[4]),
+                                               tertiary_text=f'Progress - {text[2]}%',
+                                               on_release=partial(self.select_text, text[0]))
+
+            item.add_widget(icon_left)
+            item.add_widget(icon_right)
 
             self.ids.container.add_widget(item)
 
     def navigation_draw(self):
         print('navigation_draw')
         pass
+
 
     def import_text(self):
         print('import_text')
@@ -61,6 +76,20 @@ class MainScreen(Screen):
         self.manager.current = 'importtext'
 
         self.importtext = ImportText()
+
+    def show_text_sub_menu(self, obj, text_id):
+        if not self.text_sub_menu_dialog:
+            self.text_sub_menu_dialog = MDDialog(
+                title='Settings',
+                type='custom',
+                content_cls=TextSubMenu(text_id),
+                auto_dismiss=False,
+                buttons=[MDFlatButton(text="CANCEL", on_release=self.close_text_sub_menu_dialog)])
+
+        self.text_sub_menu_dialog.open()
+
+    def close_text_sub_menu_dialog(self, obj):
+        self.text_sub_menu_dialog.dismiss()
 
     def show_instructions(self):
         if not self.help_dialog:

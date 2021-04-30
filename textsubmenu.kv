@@ -1,0 +1,59 @@
+<TextSubMenu>
+    name: 'textsubmenu'
+    id: textsubmenu
+    height: '400dp'
+    padding: "15dp"
+    size_hint_y: None
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: '15dp'
+        padding: '15dp'
+
+        MDLabel:
+            text: 'Current progress - 12%'
+
+        ThreeLineAvatarIconListItem:
+            pos_hint: {'x': 0.1, 'y': 0.5}
+            size_hint: 0.82, 1.0
+            text: '     Change progress by 10%'
+            secondary_text: '     Left arrows go backward.'
+            tertiary_text: '     Right arrows go forward.'
+            size_hint_y: None
+
+            IconLeftWidget:
+                icon: 'chevron-triple-left'
+
+            IconRightWidget:
+                icon: 'chevron-triple-right'
+
+        TwoLineIconListItem:
+            pos_hint: {'x': 0.1, 'y': 0.5}
+            text: 'Complete Text'
+            secondary_text: 'Set this text as read in 100%.'
+            size_hint_y: None
+
+            IconLeftWidget:
+                icon: 'check'
+
+        TwoLineIconListItem:
+            pos_hint: {'x': 0.1, 'y': 0.5}
+            text: 'Restart Text'
+            secondary_text: 'Go back to start, set text to 0%.'
+            size_hint_y: None
+
+            IconLeftWidget:
+                icon: 'restart'
+
+        TwoLineIconListItem:
+            pos_hint: {'x': 0.1, 'y': 0.5}
+            text: 'Delete'
+            secondary_text: 'Delete this text.'
+            size_hint_y: None
+
+            IconLeftWidget:
+                icon: 'delete'
+
+        MDRaisedButton:
+            text: "Cancel"
+            pos_hint: {'x': 0.55, 'y': 0.5}

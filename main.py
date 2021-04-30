@@ -1,29 +1,33 @@
 import sqlite3
-
 from functools import partial
 
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy.properties import Clock, NumericProperty
+from kivy.properties import Clock
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.utils import platform
 from kivymd.app import MDApp
-from kivy.metrics import dp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import TwoLineAvatarListItem, IconLeftWidget, IconRightWidget
-from kivymd.uix.list import ThreeLineAvatarIconListItem
-from kivymd.icon_definitions import md_icons
-from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import IconLeftWidget, IconRightWidget, ThreeLineAvatarIconListItem
 
 import helper_texts
-from readtext import ReadText
 from importtext import ImportText
+from readtext import ReadText
 from textsubmenu import TextSubMenu
-from kivy.utils import platform
+
+# Ask for necessary permissions while running on android platform.
 if platform == 'android':
     from android.permissions import request_permissions, Permission
-    request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
+    request_permissions([Permission.READ_EXTERNAL_STORAGE])
 
+"""
+Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (from pip, NOT from master branch on GitHub).
+List of changes made to source file of KivyMD:
+    - dialog.py - lines 504 and 507. Changed width values to fix problem with custom type MDDialog.
+"""
+
+# Temp windows size hard coded for developing process.
 Window.size = (360, 780)
 
 

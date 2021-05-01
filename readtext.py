@@ -35,8 +35,8 @@ class ReadText(Screen):
             cursor = connection.cursor()
             sql_statement = f'SELECT text_body FROM texts WHERE text_id = {int(text_id)}'
             cursor.execute(sql_statement)
-
             self.text_db = str(cursor.fetchone()[0]).split()
+
             sql_statement = f'SELECT text_position FROM texts WHERE text_id = {int(text_id)}'
             cursor.execute(sql_statement)
             self.text_position = cursor.fetchone()[0]

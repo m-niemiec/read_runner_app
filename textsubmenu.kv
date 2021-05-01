@@ -8,11 +8,12 @@
         orientation: 'vertical'
 
         MDLabel:
-            text: 'Current progress - 12%'
+            id: progress_text
+            text: ''
 
         ThreeLineAvatarIconListItem:
-            pos_hint: {'x': -0.12, 'y': 0.5}
-            size_hint: 1.27, 1.0
+            pos_hint: {'x': -0.09, 'y': 0.5}
+            size_hint: 1.18, 1.0
             text: 'Change progress by 10%'
             secondary_text: 'Left arrows go backward.'
             tertiary_text: 'Right arrows go forward.'
@@ -20,36 +21,41 @@
 
             IconLeftWidget:
                 icon: 'chevron-triple-left'
+                on_release: app.root.get_screen('mainscreen').textsubmenu.move_progress_backward()
 
             IconRightWidget:
                 icon: 'chevron-triple-right'
+                on_release: app.root.get_screen('mainscreen').textsubmenu.move_progress_forward()
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.12, 'y': 0.5}
-            size_hint: 1.27, 1.0
+            pos_hint: {'x': -0.09, 'y': 0.5}
+            size_hint: 1.18, 1.0
             text: 'Complete Text'
             secondary_text: 'Set this text as read in 100%.'
             size_hint_y: None
+            on_release: app.root.get_screen('mainscreen').textsubmenu.set_progress_as_completed()
 
             IconLeftWidget:
                 icon: 'check'
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.12, 'y': 0.5}
-            size_hint: 1.27, 1.0
+            pos_hint: {'x': -0.09, 'y': 0.5}
+            size_hint: 1.18, 1.0
             text: 'Restart Text'
             secondary_text: 'Go back to start, set text to 0%.'
             size_hint_y: None
+            on_release: app.root.get_screen('mainscreen').textsubmenu.set_progress_as_zero()
 
             IconLeftWidget:
                 icon: 'restart'
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.12, 'y': 0.5}
-            size_hint: 1.27, 1.0
+            pos_hint: {'x': -0.09, 'y': 0.5}
+            size_hint: 1.18, 1.0
             text: 'Delete'
             secondary_text: 'Delete this text.'
             size_hint_y: None
+            on_release: app.root.get_screen('mainscreen').textsubmenu.delete_selected_text()
 
             IconLeftWidget:
                 icon: 'delete'

@@ -19,7 +19,7 @@ from textsubmenu import TextSubMenu
 # Ask for necessary permissions while running on android platform.
 if platform == 'android':
     from android.permissions import request_permissions, Permission
-    request_permissions([Permission.READ_EXTERNAL_STORAGE])
+    request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 """
 Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (from pip, NOT from master branch on GitHub).
@@ -37,6 +37,8 @@ class MainScreen(Screen):
     cursor = None
     text_id = None
     readtext = None
+    importtext = None
+    textsubmenu = None
     menu = None
     text_sub_menu_dialog = None
 
@@ -72,7 +74,6 @@ class MainScreen(Screen):
         print('navigation_draw')
         pass
 
-
     def import_text(self):
         print('import_text')
 
@@ -81,18 +82,21 @@ class MainScreen(Screen):
 
         self.importtext = ImportText()
 
-    def show_text_sub_menu(self, obj, text_id):
-        if not self.text_sub_menu_dialog:
-            self.text_sub_menu_dialog = MDDialog(
-                title='Settings',
-                type='custom',
-                content_cls=TextSubMenu(text_id),
-                auto_dismiss=False,
-                buttons=[MDFlatButton(text="CANCEL", on_release=self.close_text_sub_menu_dialog)])
+    def show_text_sub_menu(self, text_id, obj):
+        self.textsubmenu = TextSubMenu(text_id)
+
+        self.text_sub_menu_dialog = MDDialog(
+            title='Settings',
+            type='custom',
+            content_cls=self.textsubmenu,
+            auto_dismiss=False,
+            buttons=[MDFlatButton(text="CANCEL1", on_release=self.close_text_sub_menu_dialog)])
 
         self.text_sub_menu_dialog.open()
 
-    def close_text_sub_menu_dialog(self, obj):
+    def close_text_sub_menu_dialog(self, obj=None):
+        self.textsubmenu.close_text_sub_menu_dialog()
+        self.custom_on_enter()
         self.text_sub_menu_dialog.dismiss()
 
     def show_instructions(self):
@@ -147,3 +151,4 @@ screen_manager.add_widget(MainScreen(name='mainscreen'))
 screen_manager.add_widget(PreferencesScreen(name='preferencesscreen'))
 screen_manager.add_widget(ReadText(name='readtext'))
 screen_manager.add_widget(ImportText(name='importtext'))
+screen_manager.add_widget(TextSubMenu(name='textsubmenu'))

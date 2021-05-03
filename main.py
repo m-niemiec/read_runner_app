@@ -90,14 +90,12 @@ class MainScreen(Screen):
             type='custom',
             content_cls=self.textsubmenu,
             auto_dismiss=False,
-            buttons=[MDFlatButton(text="CANCEL1", on_release=self.close_text_sub_menu_dialog)])
+            buttons=[MDFlatButton(text="CANCEL", on_release=self.textsubmenu.close_text_sub_menu_dialog)])
 
         self.text_sub_menu_dialog.open()
 
-    def close_text_sub_menu_dialog(self, obj=None):
-        self.textsubmenu.close_text_sub_menu_dialog()
-        self.custom_on_enter()
-        self.text_sub_menu_dialog.dismiss()
+    # def close_text_sub_menu_dialog(self, text_progress, text_id, obj=None):
+
 
     def show_instructions(self):
         if not self.help_dialog:

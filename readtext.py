@@ -47,7 +47,7 @@ class ReadText(Screen):
         self.text_position_progress = 0
         self.text_left = self.text_db[self.text_position:]
         self.text_iterator = iter(self.text_left)
-        self.event = Clock.schedule_interval(self.get_next_word, 1.0/2)
+        self.event = Clock.schedule_interval(self.get_next_word, 1.0/5)
         self.event_2 = Clock.schedule_interval(self.update_status, 1.0)
 
     def update_status(self, dt=None):

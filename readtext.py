@@ -1,4 +1,5 @@
 import sqlite3
+import json
 from kivy.uix.screenmanager import Screen
 from itertools import islice
 from kivy.properties import Clock
@@ -25,23 +26,34 @@ class ReadText(Screen):
     event_2 = None
     text_id = None
     text_data = None
+    preferences_data = None
 
     def __init__(self, text_id=None, **kwargs):
         super().__init__(**kwargs)
 
         if text_id:
             self.text_id = text_id
-            connection = sqlite3.connect('read_runner.db')
-            cursor = connection.cursor()
-            sql_statement = f'SELECT * FROM texts WHERE text_id = {int(text_id)}'
-            cursor.execute(sql_statement)
-            self.text_data = cursor.fetchone()
-            print(self.text_data)
-            self.text_db = str(self.text_data[6]).split()
-            self.text_position = self.text_data[1]
-            self.progress = self.text_data[2]
 
+            self.get_text_data()
             self.update_status(progress=self.progress)
+            self.get_user_preferences()
+
+    def get_text_data(self):
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+        sql_statement = f'SELECT * FROM texts WHERE text_id = {int(self.text_id)}'
+        cursor.execute(sql_statement)
+        self.text_data = cursor.fetchone()
+        self.text_db = str(self.text_data[6]).split()
+        self.text_position = self.text_data[1]
+        self.progress = self.text_data[2]
+
+    def get_user_preferences(self):
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT * from preferences')
+
+        self.preferences_data = json.loads(cursor.fetchone()[0])
 
     def start_reading(self):
         self.reading_running = True

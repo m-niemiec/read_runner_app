@@ -12,6 +12,8 @@ class TextSubMenu(Screen):
     text_progress = None
     text_data = None
     delete_dialog = None
+    text_position = None
+    text_length = None
 
     def __init__(self, text_id=None, **kwargs):
         super().__init__(**kwargs)
@@ -26,7 +28,9 @@ class TextSubMenu(Screen):
         cursor.execute('SELECT * from texts WHERE text_id = ?', (self.text_id,))
 
         self.text_data = cursor.fetchone()
+        self.text_position = self.text_data[1]
         self.text_progress = self.text_data[2]
+        self.text_length = len(str(self.text_data[6]).split())
 
     def delete_selected_text(self):
         if not self.delete_dialog:
@@ -47,6 +51,7 @@ class TextSubMenu(Screen):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
         cursor.execute('UPDATE texts SET text_progress = ? WHERE text_id = ?', (self.text_progress, self.text_id))
+        cursor.execute('UPDATE texts SET text_position = ? WHERE text_id = ?', (int(self.text_position), self.text_id))
         connection.commit()
 
         MDApp.get_running_app().root.get_screen("mainscreen").custom_on_enter()
@@ -63,21 +68,25 @@ class TextSubMenu(Screen):
         self.close_delete_dialog()
 
     def move_progress_backward(self):
-        if self.text_progress >= 10:
+        if self.text_progress >= 11:
             self.text_progress -= 10
+            self.text_position -= self.text_length/10
             self.update_text_progress_label()
 
     def move_progress_forward(self):
-        if self.text_progress <= 90:
+        if self.text_progress <= 89:
             self.text_progress += 10
+            self.text_position += self.text_length / 10
             self.update_text_progress_label()
 
     def set_progress_as_completed(self):
         self.text_progress = 100
+        self.text_position = self.text_length - 1
         self.update_text_progress_label()
 
     def set_progress_as_zero(self):
         self.text_progress = 0
+        self.text_position = 1
         self.update_text_progress_label()
 
     def update_text_progress_label(self):

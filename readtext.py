@@ -11,7 +11,6 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 
 
-
 class ReadText(Screen):
     reading_running = False
     text_iterator = None
@@ -25,6 +24,7 @@ class ReadText(Screen):
     text_left = None
     event_2 = None
     text_id = None
+    text_data = None
 
     def __init__(self, text_id=None, **kwargs):
         super().__init__(**kwargs)
@@ -35,12 +35,13 @@ class ReadText(Screen):
             cursor = connection.cursor()
             sql_statement = f'SELECT * FROM texts WHERE text_id = {int(text_id)}'
             cursor.execute(sql_statement)
-            text_data = cursor.fetchone()
+            self.text_data = cursor.fetchone()
+            print(self.text_data)
+            self.text_db = str(self.text_data[6]).split()
+            self.text_position = self.text_data[1]
+            self.progress = self.text_data[2]
 
-            self.text_db = str(text_data[6]).split()
-            self.text_position = text_data[1]
-
-            self.update_status()
+            self.update_status(progress=self.progress)
 
     def start_reading(self):
         self.reading_running = True
@@ -50,9 +51,10 @@ class ReadText(Screen):
         self.event = Clock.schedule_interval(self.get_next_word, 1.0/5)
         self.event_2 = Clock.schedule_interval(self.update_status, 1.0)
 
-    def update_status(self, dt=None):
+    def update_status(self, dt=None, progress=None):
         status_text_position = self.text_position + self.text_position_progress
         self.progress = 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
+        # self.progress = progress if progress else 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
         MDApp.get_running_app().root.get_screen("readtext").ids.progress_bar.value = self.progress
         MDApp.get_running_app().root.get_screen("readtext").ids.progress_text.text = str(self.progress)
 

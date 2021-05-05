@@ -2,6 +2,7 @@
 #:include importtext.kv
 #:include textsubmenu.kv
 #:include preferences.kv
+#:include help.kv
 
 ScreenManager:
     MainScreen:
@@ -9,6 +10,7 @@ ScreenManager:
     ReadText:
     ImportText:
     TextSubMenu:
+    Help:
 
 <MainScreen>:
     name: 'mainscreen'
@@ -51,13 +53,6 @@ ScreenManager:
             ScrollView:
                 MDList:
                     TwoLineIconListItem:
-                        text: '[size=20dp]Help[/size]'
-                        secondary_text: '[size=13dp]Learn more about ReadRunner.[/size]'
-                        on_release: app.root.get_screen('mainscreen').view_preferences()
-                        IconLeftWidget:
-                            icon: "help-circle"
-
-                    TwoLineIconListItem:
                         text: '[size=20dp]Preferences[/size]'
                         secondary_text: '[size=13dp]Change various settings.[/size]'
                         on_release: app.root.get_screen('mainscreen').view_preferences()
@@ -65,11 +60,11 @@ ScreenManager:
                             icon: "account-cog"
 
                     TwoLineIconListItem:
-                        text: '[size=20dp]About[/size]'
-                        secondary_text: '[size=13dp]About this app and author.[/size]'
-                        on_release: app.root.get_screen('mainscreen').view_preferences()
+                        text: '[size=20dp]Help[/size]'
+                        secondary_text: '[size=13dp]Learn more about ReadRunner.[/size]'
+                        on_release: app.root.get_screen('mainscreen').view_help()
                         IconLeftWidget:
-                            icon: "information"
+                            icon: "help-circle"
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Exit[/size]'

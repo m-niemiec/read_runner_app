@@ -16,6 +16,7 @@ from importtext import ImportText
 from readtext import ReadText
 from textsubmenu import TextSubMenu
 from preferences import Preferences
+from help import Help
 
 # Ask for necessary permissions while running on android platform.
 if platform == 'android':
@@ -43,6 +44,7 @@ class MainScreen(Screen):
     menu = None
     text_sub_menu_dialog = None
     preferences = None
+    help = None
 
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
@@ -121,6 +123,12 @@ class MainScreen(Screen):
 
         self.preferences = Preferences()
 
+    def view_help(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'help'
+
+        self.help = Help()
+
     def close_app(self):
         # MDApp.get_running_app().stop()
         # ReadRunnerApp().get_running_app().stop()
@@ -151,3 +159,4 @@ screen_manager.add_widget(Preferences(name='preferences'))
 screen_manager.add_widget(ReadText(name='readtext'))
 screen_manager.add_widget(ImportText(name='importtext'))
 screen_manager.add_widget(TextSubMenu(name='textsubmenu'))
+screen_manager.add_widget(Help(name='help'))

@@ -1,0 +1,20 @@
+#:import help_text helper_texts.help_screen_text
+
+<Help>:
+    name: 'help'
+    id: help
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: 'Read Runner - Help'
+            left_action_items: [['keyboard-backspace', lambda x: app.root.get_screen('help').go_back()]]
+            elevation: 10
+
+        ScrollView:
+            MDLabel:
+                text: help_text
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]

@@ -1,10 +1,11 @@
 #:include readtext.kv
 #:include importtext.kv
 #:include textsubmenu.kv
+#:include preferences.kv
 
 ScreenManager:
     MainScreen:
-    PreferencesScreen:
+    Preferences:
     ReadText:
     ImportText:
     TextSubMenu:
@@ -52,21 +53,21 @@ ScreenManager:
                     TwoLineIconListItem:
                         text: '[size=20dp]Help[/size]'
                         secondary_text: '[size=13dp]Learn more about ReadRunner.[/size]'
-                        on_release: root.manager.current = 'preferencesscreen'
+                        on_release: app.root.get_screen('mainscreen').view_preferences()
                         IconLeftWidget:
                             icon: "help-circle"
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Preferences[/size]'
                         secondary_text: '[size=13dp]Change various settings.[/size]'
-                        on_release: root.manager.current = 'preferencesscreen'
+                        on_release: app.root.get_screen('mainscreen').view_preferences()
                         IconLeftWidget:
                             icon: "account-cog"
 
                     TwoLineIconListItem:
                         text: '[size=20dp]About[/size]'
                         secondary_text: '[size=13dp]About this app and author.[/size]'
-                        on_release: root.manager.current = 'preferencesscreen'
+                        on_release: app.root.get_screen('mainscreen').view_preferences()
                         IconLeftWidget:
                             icon: "information"
 
@@ -86,8 +87,3 @@ ScreenManager:
                 text: 'To import book or text press plus icon in bottom right on main screen.'
                 font_style: 'Subtitle1'
                 size_hint_y: None
-
-<PreferencesScreen>:
-    name: 'preferencesscreen'
-    MDLabel:
-        text: 'Test'

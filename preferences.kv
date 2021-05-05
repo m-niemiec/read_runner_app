@@ -1,0 +1,83 @@
+<Preferences>:
+    name: 'preferences'
+    id: preferences
+    word_size: 'medium'
+    word_brightness: 'bright'
+    word_size: 'bright'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: 'Read Runner - Preferences'
+            left_action_items: [['keyboard-backspace', lambda x: app.root.get_screen('preferences').go_back()]]
+            elevation: 10
+
+        MDLabel:
+            text: 'Change reading speed:'
+
+        GridLayout:
+            cols: 2
+
+            MDLabel:
+                text: 'Speed (in words per minute):'
+            MDTextField:
+                hint_text: 'Number between 30 and 600'
+                id: reading_speed
+                text: '120'
+
+        MDLabel:
+            text: 'Change word size:'
+
+        GridLayout:
+            cols: 6
+
+            MDLabel:
+                text: 'Small'
+            MDCheckbox:
+                id: checkbox_word_size_small
+                active: False
+                group: 'size'
+                on_active: app.root.get_screen('preferences').change_word_size('small')
+
+            MDLabel:
+                text: 'Medium'
+            MDCheckbox:
+                id: checkbox_word_size_medium
+                active: False
+                group: 'size'
+                on_active: app.root.get_screen('preferences').change_word_size('medium')
+
+            MDLabel:
+                text: 'Large'
+            MDCheckbox:
+                id: checkbox_word_size_large
+                active: False
+                group: 'size'
+                on_active: app.root.get_screen('preferences').change_word_size('large')
+
+        MDLabel:
+            text: 'Choose brightness of text word:'
+
+        GridLayout:
+            cols: 4
+
+            MDLabel:
+                text: 'Bright'
+            MDCheckbox:
+                id: checkbox_brightness_bright
+                active: False
+                group: 'brightness'
+                on_active: app.root.get_screen('preferences').change_word_brightness('bright')
+
+            MDLabel:
+                text: 'Dark'
+            MDCheckbox:
+                id: checkbox_brightness_dark
+                active: False
+                group: 'brightness'
+                on_active: app.root.get_screen('preferences').change_word_brightness('dark')
+
+        MDFlatButton:
+            text: 'Save Preferences'
+            on_release: app.root.get_screen('preferences').save_new_preferences()

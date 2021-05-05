@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 conn = sqlite3.connect('read_runner.db')
 c = conn.cursor()
@@ -8,6 +9,15 @@ c.execute("INSERT INTO texts VALUES (1, 0, 0, 'Test Type','Test Author', 'Test T
 c.execute("INSERT INTO texts VALUES (2, 0, 0, 'Test Type2','Test Author2', 'HP', 'My dear Professor, surely a sensible "
           "person like yourself can call him by his name? All this “You-Know-Who” nonsense – for eleven years I have "
           "been trying to persuade people to call him by his proper name: Voldemort.')")
+
+c.execute("CREATE TABLE preferences (data json)")
+
+preferences = {'reading_speed': '100',
+ 'word_brightness': 'bright',
+ 'word_size': 'medium'}
+
+c.execute("INSERT INTO preferences VALUES (?)",
+          [json.dumps(preferences)])
 
 conn.commit()
 conn.close()

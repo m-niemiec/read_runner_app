@@ -15,6 +15,7 @@ import helper_texts
 from importtext import ImportText
 from readtext import ReadText
 from textsubmenu import TextSubMenu
+from preferences import Preferences
 
 # Ask for necessary permissions while running on android platform.
 if platform == 'android':
@@ -41,6 +42,7 @@ class MainScreen(Screen):
     textsubmenu = None
     menu = None
     text_sub_menu_dialog = None
+    preferences = None
 
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
@@ -94,9 +96,6 @@ class MainScreen(Screen):
 
         self.text_sub_menu_dialog.open()
 
-    # def close_text_sub_menu_dialog(self, text_progress, text_id, obj=None):
-
-
     def show_instructions(self):
         if not self.help_dialog:
             self.help_dialog = MDDialog(
@@ -116,14 +115,16 @@ class MainScreen(Screen):
 
         self.readtext = ReadText(text_id=text_id)
 
+    def view_preferences(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'preferences'
+
+        self.preferences = Preferences()
+
     def close_app(self):
         # MDApp.get_running_app().stop()
         # ReadRunnerApp().get_running_app().stop()
         exit()
-
-
-class PreferencesScreen(Screen):
-    pass
 
 
 class ReadRunnerApp(MDApp):
@@ -146,7 +147,7 @@ if __name__ == '__main__':
 
 screen_manager = ScreenManager()
 screen_manager.add_widget(MainScreen(name='mainscreen'))
-screen_manager.add_widget(PreferencesScreen(name='preferencesscreen'))
+screen_manager.add_widget(Preferences(name='preferences'))
 screen_manager.add_widget(ReadText(name='readtext'))
 screen_manager.add_widget(ImportText(name='importtext'))
 screen_manager.add_widget(TextSubMenu(name='textsubmenu'))

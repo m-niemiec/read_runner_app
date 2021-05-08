@@ -1,6 +1,7 @@
 import re
 import sqlite3
 import uuid
+import pdfplumber
 
 from kivy.core.clipboard import Clipboard
 from kivy.properties import StringProperty
@@ -21,6 +22,8 @@ class ImportText(Screen):
     manager_open = False
     file_manager = None
     warning_dialog = None
+    text_loading_dialog = None
+    new_text = None
 
     def import_from_clipboard(self):
         self.imported_text = Clipboard.paste()
@@ -41,8 +44,10 @@ class ImportText(Screen):
         self.manager_open = True
 
     def select_path(self, path):
-        text_file_path = path
         self.exit_manager()
+        import time
+        time.sleep(1)
+        text_file_path = path
         toast(text_file_path)
         self.determine_file_type(text_file_path)
 
@@ -68,7 +73,41 @@ class ImportText(Screen):
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text
 
     def import_pdf_file(self, text_file_path):
-        pass
+
+        self.text_loading()
+
+        i = 0
+        new_text = ''
+
+        with pdfplumber.open(text_file_path) as pdf:
+            for page in pdf.pages[:10]:
+                print(i)
+                i += 1
+
+                new_text += str(page.extract_text()).replace('\n', ' ')
+
+                # connection = sqlite3.connect('read_runner.db')
+                # cursor = connection.cursor()
+                # cursor.execute("INSERT INTO temp_text VALUES (?, ?)",
+                #                (text_file_path, str(page.extract_text()).replace('\n', ' ')))
+
+                # cursor.execute("UPDATE temp_text SET text_body = text_body + ? WHERE text_id = ",
+                #                (text_file_path, str(page.extract_text()).replace('\n', ' ')))
+
+                # test = str(page.extract_text()).replace('\n', ' ')
+
+                # cursor.execute(f"UPDATE temp_text SET text_body = text_body + (?)", (test, ))
+                #
+                # connection.commit()
+
+                del page._objects
+                del page._layout
+
+        self.new_text = new_text
+
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text[:100]
+
+        # self.text_loading_dialog.dismiss()
 
     def import_mobi_file(self, text_file_path):
         pass
@@ -123,3 +162,11 @@ class ImportText(Screen):
 
     def close_help_dialog(self, obj):
         self.warning_dialog.dismiss()
+
+    def text_loading(self):
+        print("im here")
+        MDApp.get_running_app().root.get_screen("readtext").manager.transition.direction = 'right'
+        MDApp.get_running_app().root.get_screen("readtext").manager.current = 'mainscreen'
+
+    def text_loading_close(self):
+        self.text_loading_dialog.dismiss()

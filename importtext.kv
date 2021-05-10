@@ -60,3 +60,17 @@
             text: 'Save new Text!'
             font_style: 'H4'
             on_release: app.root.get_screen('mainscreen').importtext.save_new_text()
+
+<TextLoading>
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDLabel:
+            id: import_progress
+            text: root.import_progress
+
+        MDSpinner:
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            active: True

@@ -54,13 +54,27 @@ class ReadText(Screen):
         cursor.execute('SELECT * from preferences')
 
         self.preferences_data = json.loads(cursor.fetchone()[0])
+        self.use_user_preferences()
+
+    def use_user_preferences(self):
+        if self.preferences_data['word_size'] == 'small':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Body1'
+        elif self.preferences_data['word_size'] == 'medium':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'H5'
+        elif self.preferences_data['word_size'] == 'large':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'H4'
+
+        if self.preferences_data['word_size'] == 'bright':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Primary'
+        elif self.preferences_data['word_size'] == 'dark':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Hint'
 
     def start_reading(self):
         self.reading_running = True
         self.text_position_progress = 0
         self.text_left = self.text_db[self.text_position:]
         self.text_iterator = iter(self.text_left)
-        self.event = Clock.schedule_interval(self.get_next_word, 1.0/5)
+        self.event = Clock.schedule_interval(self.get_next_word, 1.0/(int(self.preferences_data['reading_speed'])/60))
         self.event_2 = Clock.schedule_interval(self.update_status, 1.0)
 
     def update_status(self, dt=None, progress=None):

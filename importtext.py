@@ -38,9 +38,13 @@ class ImportText(Screen):
     pdf_page_count = 0
     import_progress = StringProperty('0%')
 
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.clear_temp_database()
+
     def import_from_clipboard(self):
         self.imported_text = Clipboard.paste()
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = self.imported_text
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = self.imported_text[:500]
 
     def import_from_file(self):
         path = '/'
@@ -86,7 +90,9 @@ class ImportText(Screen):
         with open(text_file_path, encoding='utf-8-sig') as file:
             new_text = file.readlines()
 
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text[:1000]
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text[:500]
+
+        self.text_loading_dialog.dismiss()
 
     def import_pdf_file(self, text_file_path, obj=None):
         pdf_page_count = len(pdfplumber.open(text_file_path).pages)
@@ -110,15 +116,26 @@ class ImportText(Screen):
                 del page._layout
                 # page.flush_cache()
 
-        # MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text[:1000]
-
         self.text_loading_dialog.dismiss()
+        self.update_text_preview()
+
+    def update_text_preview(self):
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+
+        cursor.execute('SELECT * from temp_data')
+        new_text_preview = cursor.fetchone()[0][:500]
+
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text_preview
 
     def import_mobi_file(self, text_file_path):
         tempdir, filepath = mobi.extract(text_file_path)
         file = open(filepath, 'r', errors='ignore')
         content = file.read()
         return html2text.html2text(content.replace('\\n', ''))
+
+        self.text_loading_dialog.dismiss()
+        self.update_text_preview()
 
     def import_epub_file(self, text_file_path):
         book = epub.read_epub(text_file_path)
@@ -128,30 +145,37 @@ class ImportText(Screen):
                 # chapters.append(item.get_content())
                 self.save_temp_data(str(item.get_content()).replace('\\n', ''))
 
-        # return html2text.html2text(str(chapters)).replace('\\n', '')
+        self.text_loading_dialog.dismiss()
+        self.update_text_preview()
 
     def save_temp_data(self, text_body):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
 
-        # cursor.execute('DROP TABLE IF EXISTS temp_data')
-        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (temp_text_body text)')
-        # cursor.execute('INSERT INTO temp_data VALUES (?)',
-        #                (text_body, ))
-        cursor.execute('UPDATE temp_data SET "temp_text_body" = "temp_text_body" || (?)',
-                       (text_body, ))
-        print(text_body[:10])
+        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (temp_text_body text, id integer primary key )')
+
+        cursor.execute('INSERT INTO temp_data(temp_text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
+                       'SET temp_text_body = temp_text_body || (?)', (text_body, text_body))
+
+        connection.commit()
+
+    def clear_temp_database(self):
+        connection = sqlite3.connect('read_runner.db')
+
+        cursor = connection.cursor()
+        cursor.execute('DROP TABLE IF EXISTS temp_data')
+
         connection.commit()
 
     def save_new_text(self):
         text_title = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_title_field.text
         text_author = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_author_field.text
-        text_body = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text
+        text_body_preview = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text
 
         if text_title == '':
             return self.show_instructions('Please add title.')
 
-        if text_body == '':
+        if text_body_preview == '':
             return self.show_instructions('Please add text.')
 
         try:
@@ -163,16 +187,20 @@ class ImportText(Screen):
 
         print(text_title)
         print(text_author)
-        print(text_body)
+        print(text_body_preview)
         print(text_type)
 
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
+
         cursor.execute('SELECT * from texts WHERE text_id = ?', (new_id,))
 
         if not cursor.fetchone():
+            target_table = 'texts'
+            temp_data_table = 'temp_data'
+
             cursor.execute('INSERT INTO texts VALUES (?, 0, 0, ?, ?, ?, ?)',
-                           (new_id, text_type, text_title, text_author, text_body[0]))
+                           (new_id, text_type, text_title, text_author, text_body_preview[0]))
         else:
             self.save_new_text_data(self.save_new_text)
 

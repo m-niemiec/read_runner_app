@@ -41,8 +41,7 @@ class ReadText(Screen):
     def get_text_data(self):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
-        sql_statement = f'SELECT * FROM texts WHERE text_id = {int(self.text_id)}'
-        cursor.execute(sql_statement)
+        cursor.execute('SELECT * FROM texts WHERE text_id = (?)', (self.text_id, ))
         self.text_data = cursor.fetchone()
         self.text_db = str(self.text_data[6]).split()
         self.text_position = self.text_data[1]
@@ -109,11 +108,9 @@ class ReadText(Screen):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
 
-        sql_statement = f'UPDATE texts SET text_position = {self.text_position} WHERE text_id = {int(self.text_id)}'
-        cursor.execute(sql_statement)
+        cursor.execute('UPDATE texts SET text_position = (?) WHERE text_id = (?)', (self.text_position, self.text_id))
 
-        sql_statement = f'UPDATE texts SET text_progress = {self.progress} WHERE text_id = {int(self.text_id)}'
-        cursor.execute(sql_statement)
+        cursor.execute('UPDATE texts SET text_progress = (?) WHERE text_id = (?)', (self.progress, self.text_id))
 
         connection.commit()
 

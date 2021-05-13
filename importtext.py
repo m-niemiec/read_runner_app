@@ -152,10 +152,10 @@ class ImportText(Screen):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
 
-        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (temp_text_body text, id integer primary key )')
+        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (text_body text, id integer primary key )')
 
-        cursor.execute('INSERT INTO temp_data(temp_text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
-                       'SET temp_text_body = temp_text_body || (?)', (text_body, text_body))
+        cursor.execute('INSERT INTO temp_data(text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
+                       'SET text_body = text_body || (?)', (text_body, text_body))
 
         connection.commit()
 
@@ -183,26 +183,15 @@ class ImportText(Screen):
         except AttributeError:
             return self.show_instructions('Please select text type.')
 
-        new_id = str(uuid.uuid4()).replace('-', '')
-
-        print(text_title)
-        print(text_author)
-        print(text_body_preview)
-        print(text_type)
-
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
 
-        cursor.execute('SELECT * from texts WHERE text_id = ?', (new_id,))
+        cursor.execute('INSERT INTO texts (text_body) SELECT text_body FROM temp_data')
 
-        if not cursor.fetchone():
-            target_table = 'texts'
-            temp_data_table = 'temp_data'
+        last_row_id = cursor.lastrowid
 
-            cursor.execute('INSERT INTO texts VALUES (?, 0, 0, ?, ?, ?, ?)',
-                           (new_id, text_type, text_title, text_author, text_body_preview[0]))
-        else:
-            self.save_new_text_data(self.save_new_text)
+        cursor.execute('UPDATE texts SET text_position=0, text_progress=0, text_type=(?), text_title=(?), '
+                       'text_author=(?) WHERE text_id = (?)', (text_type, text_title, text_author, last_row_id))
 
         connection.commit()
         connection.close()

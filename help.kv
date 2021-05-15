@@ -13,8 +13,11 @@
             elevation: 10
 
         ScrollView:
+            pos_hint: {'x': 0.05, 'y': 0.5}
             MDLabel:
+                size_hint: (0.9, 1.0)
                 text: help_text
                 text_size: self.width, None
                 size_hint_y: None
                 height: self.texture_size[1]
+                theme_text_color: 'Primary'

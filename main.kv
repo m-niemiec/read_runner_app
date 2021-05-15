@@ -31,7 +31,6 @@ ScreenManager:
         MDBottomAppBar:
             MDToolbar:
                 mode: "free-end"
-                left_action_items: [['book-open-variant', lambda x: app.root.get_screen('mainscreen').import_text()]]
                 right_action_items: [['plus', lambda x: app.root.get_screen('mainscreen').import_text()]]
                 icon: ''
                 icon_width: 0
@@ -42,16 +41,24 @@ ScreenManager:
         id: navigation_drawer
         BoxLayout:
             orientation: 'vertical'
-            padding: '10dp'
+            padding: '5dp'
 
             MDLabel:
-                text: 'Menu'
-                font_style: 'H4'
-                pos_hint: {'x': 0.35, 'y': 0.5}
+                text: 'Read Runner - Menu'
+                font_style: 'H5'
+                pos_hint: {'x': 0.15, 'y': 0.5}
                 size_hint_y: None
+                theme_text_color: 'Primary'
 
             ScrollView:
                 MDList:
+                    TwoLineIconListItem:
+                        text: '[size=20dp]Import Text[/size]'
+                        secondary_text: '[size=13dp]Import new book to read.[/size]'
+                        on_release: app.root.get_screen('mainscreen').import_text()
+                        IconLeftWidget:
+                            icon: "plus"
+
                     TwoLineIconListItem:
                         text: '[size=20dp]Preferences[/size]'
                         secondary_text: '[size=13dp]Change various settings.[/size]'
@@ -74,11 +81,19 @@ ScreenManager:
                             icon: "close-circle-outline"
 
             MDLabel:
-                text: 'Quick tip:'
+                text: 'Quick tips:'
                 font_style: 'Subtitle1'
                 size_hint_y: None
+                theme_text_color: 'Secondary'
 
             MDLabel:
-                text: 'To import book or text press plus icon in bottom right on main screen.'
+                text: ' - To import book press plus icon in bottom right on main screen or in menu.'
                 font_style: 'Subtitle1'
                 size_hint_y: None
+                theme_text_color: 'Secondary'
+
+            MDLabel:
+                text: ' - In preferences you can change reading speed and other things.'
+                font_style: 'Subtitle1'
+                size_hint_y: None
+                theme_text_color: 'Secondary'

@@ -21,7 +21,7 @@ from ebooklib import epub
 
 
 class TextLoading(Screen):
-    import_progress = StringProperty('Estimating PDF size ...')
+    import_progress = StringProperty('Estimating file size ...')
 
 
 class ImportText(Screen):
@@ -33,6 +33,7 @@ class ImportText(Screen):
     text_loading_dialog = None
     new_text = None
     text_loading = None
+    error_dialog = None
     pdf_page_count = 0
     import_progress = StringProperty('0%')
 
@@ -50,7 +51,7 @@ class ImportText(Screen):
             exit_manager=self.exit_manager,
             select_path=self.select_path
         )
-        self.file_manager.ext = [".txt", ".pdf", ".mobi", ".epub"]
+        self.file_manager.ext = ['.txt', '.pdf', '.mobi', '.epub', '.TXT', '.PDF', '.MOBI', '.EPUB']
         self.file_manager.show(path)
         self.manager_open = True
 
@@ -65,7 +66,6 @@ class ImportText(Screen):
         self.exit_manager()
         executor = ThreadPoolExecutor(5)
         executor.submit(partial(self.determine_file_type, text_file_path))
-        # self.determine_file_type(text_file_path)
 
     def exit_manager(self, *args):
         self.manager_open = False
@@ -81,8 +81,7 @@ class ImportText(Screen):
         elif re.search(r'\S+.epub|\S+.EPUB', text_file_path):
             self.import_epub_file(text_file_path)
         else:
-            pass
-            # show dialog about wrong file type
+            self.show_error('Wrong file type selected. Please choose another one.')
 
     def import_txt_file(self, text_file_path):
         with open(text_file_path, encoding='utf-8-sig') as file:
@@ -96,13 +95,8 @@ class ImportText(Screen):
     def import_pdf_file(self, text_file_path, obj=None):
         pdf_page_count = len(pdfplumber.open(text_file_path).pages)
 
-        i = 0
-
         with pdfplumber.open(text_file_path) as pdf:
             for page in pdf.pages[:50]:
-                print(i)
-                i += 1
-
                 import_progress = '{:.2f}'.format(i / pdf_page_count * 100)
 
                 self.text_loading.import_progress = f'Imported - {import_progress}%'
@@ -111,8 +105,7 @@ class ImportText(Screen):
 
                 self.save_temp_data(new_page)
 
-                # del page._objects
-                # del page._layout
+                # We want to flush cache every loop to save as much RAM as possible.
                 page.flush_cache()
 
         self.text_loading_dialog.dismiss()
@@ -121,15 +114,18 @@ class ImportText(Screen):
     def import_mobi_file(self, text_file_path):
         tempdir, filepath = mobi.extract(text_file_path)
 
+        # If extracted MOBI file has extension TXT that means that everything worked properly.
         if re.search(r'\S+.txt|\S+.TXT', filepath):
             file = open(filepath, 'r', errors='ignore')
             content = file.read()
             new_text = html2text.html2text(content.replace('\\n', ''))
             self.save_temp_data(new_text)
             shutil.rmtree(tempdir, ignore_errors=True)
+        # In other case (for example extracted file has EPUB format) that means that MOBI file was encrypted and
+        # content will be corrupted.
         else:
-            pass
-            # Show encryption error
+            self.text_loading_dialog.dismiss()
+            self.show_error('The file provided cannot be processed. Please try another one')
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -226,3 +222,15 @@ class ImportText(Screen):
 
         self.text_loading_dialog.open()
 
+    def show_error(self, error_text):
+        self.error_dialog = MDDialog(
+            title='Something went wrong :(',
+            text=error_text,
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
+            size_hint=(0.9, 0.8),
+            buttons=[MDFlatButton(text="CANCEL", on_release=self.close_error_dialog)])
+
+        self.error_dialog.open()
+
+    def close_error_dialog(self, obj):
+        self.error_dialog.dismiss()

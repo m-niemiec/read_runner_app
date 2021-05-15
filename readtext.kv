@@ -14,7 +14,7 @@
         MDLabel:
             id: text_word
             text: 'Thyroparathyroidectomized'
-            pos_hint: {'x': 0.1, 'y': 0.5}
+            halign: "center"
             pos_hint_y: None
             font_style: 'H1'
             theme_text_color: 'Hint'
@@ -27,6 +27,8 @@
         MDProgressBar:
             id: progress_bar
             value: 0
+            size_hint: (0.9, 1.0)
+            pos_hint: {'x': 0.05, 'y': 0.5}
 
         MDBottomAppBar:
             MDToolbar:

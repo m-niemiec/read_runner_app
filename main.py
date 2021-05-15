@@ -84,7 +84,7 @@ class MainScreen(Screen):
         self.textsubmenu = TextSubMenu(text_id)
 
         self.text_sub_menu_dialog = MDDialog(
-            title='Settings',
+            # title='Settings',
             type='custom',
             content_cls=self.textsubmenu,
             auto_dismiss=False,

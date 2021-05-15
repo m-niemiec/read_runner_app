@@ -125,7 +125,7 @@ class ImportText(Screen):
         # content will be corrupted.
         else:
             self.text_loading_dialog.dismiss()
-            self.show_error('The file provided cannot be processed. Please try another one')
+            self.show_error('The file provided cannot be processed. Please try another one.')
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -234,3 +234,7 @@ class ImportText(Screen):
 
     def close_error_dialog(self, obj):
         self.error_dialog.dismiss()
+
+    def go_back(self):
+        MDApp.get_running_app().root.get_screen("importtext").manager.transition.direction = 'right'
+        MDApp.get_running_app().root.get_screen("importtext").manager.current = 'mainscreen'

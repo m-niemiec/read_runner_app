@@ -1,3 +1,4 @@
+import shutil
 import re
 import sqlite3
 import uuid
@@ -52,7 +53,7 @@ class ImportText(Screen):
             exit_manager=self.exit_manager,
             select_path=self.select_path
         )
-        self.file_manager.ext = [".txt", ".pdf"]
+        self.file_manager.ext = [".txt", ".pdf", ".mobi", ".epub"]
         self.file_manager.show(path)
         self.manager_open = True
 
@@ -92,6 +93,7 @@ class ImportText(Screen):
 
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text[:500]
 
+        self.save_temp_data(new_text)
         self.text_loading_dialog.dismiss()
 
     def import_pdf_file(self, text_file_path, obj=None):
@@ -112,12 +114,38 @@ class ImportText(Screen):
 
                 self.save_temp_data(new_page)
 
-                del page._objects
-                del page._layout
-                # page.flush_cache()
+                # del page._objects
+                # del page._layout
+                page.flush_cache()
 
         self.text_loading_dialog.dismiss()
         self.update_text_preview()
+
+    def import_mobi_file(self, text_file_path):
+        tempdir, filepath = mobi.extract(text_file_path)
+
+        if re.search(r'\S+.txt|\S+.TXT', filepath):
+            file = open(filepath, 'r', errors='ignore')
+            content = file.read()
+            new_text = html2text.html2text(content.replace('\\n', ''))
+            self.save_temp_data(new_text)
+            shutil.rmtree(tempdir, ignore_errors=True)
+        else:
+            pass
+            # Show encryption error
+
+        self.update_text_preview()
+        self.text_loading_dialog.dismiss()
+
+    def import_epub_file(self, text_file_path):
+        book = epub.read_epub(text_file_path)
+
+        for item in book.get_items():
+            if item.get_type() == ebooklib.ITEM_DOCUMENT:
+                self.save_temp_data(str(item.get_content()).replace('\\n', ''))
+
+        self.update_text_preview()
+        self.text_loading_dialog.dismiss()
 
     def update_text_preview(self):
         connection = sqlite3.connect('read_runner.db')
@@ -127,26 +155,6 @@ class ImportText(Screen):
         new_text_preview = cursor.fetchone()[0][:500]
 
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text_preview
-
-    def import_mobi_file(self, text_file_path):
-        tempdir, filepath = mobi.extract(text_file_path)
-        file = open(filepath, 'r', errors='ignore')
-        content = file.read()
-        return html2text.html2text(content.replace('\\n', ''))
-
-        self.text_loading_dialog.dismiss()
-        self.update_text_preview()
-
-    def import_epub_file(self, text_file_path):
-        book = epub.read_epub(text_file_path)
-        chapters = []
-        for item in book.get_items():
-            if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                # chapters.append(item.get_content())
-                self.save_temp_data(str(item.get_content()).replace('\\n', ''))
-
-        self.text_loading_dialog.dismiss()
-        self.update_text_preview()
 
     def save_temp_data(self, text_body):
         connection = sqlite3.connect('read_runner.db')
@@ -195,6 +203,8 @@ class ImportText(Screen):
 
         connection.commit()
         connection.close()
+
+        self.clear_temp_database()
 
     def show_instructions(self, warning_text):
         self.warning_dialog = MDDialog(

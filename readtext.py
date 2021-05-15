@@ -1,14 +1,8 @@
-import sqlite3
 import json
+import sqlite3
+
+from kivy.properties import Clock, StringProperty, NumericProperty
 from kivy.uix.screenmanager import Screen
-from itertools import islice
-from kivy.properties import Clock
-from kivy.base import runTouchApp
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
-from kivymd.uix.label import MDLabel
-from kivymd.uix.list import TwoLineAvatarListItem
-from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 
 

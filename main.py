@@ -12,11 +12,11 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import IconLeftWidget, IconRightWidget, ThreeLineAvatarIconListItem
 
 import helper_texts
+from help import Help
 from importtext import ImportText
+from preferences import Preferences
 from readtext import ReadText
 from textsubmenu import TextSubMenu
-from preferences import Preferences
-from help import Help
 
 # Ask for necessary permissions while running on android platform.
 if platform == 'android':

@@ -1,26 +1,23 @@
-import shutil
 import re
+import shutil
 import sqlite3
-import uuid
-import pdfplumber
+from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-import ebooklib
-from ebooklib import epub
-import mobi
-import html2text
 
+import html2text
+import mobi
+import pdfplumber
 from kivy.core.clipboard import Clipboard
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
 from kivymd.toast import toast
-from kivymd.uix.filemanager import MDFileManager
-from kivymd.uix.menu import MDDropdownMenu
-from kivy.metrics import dp
-from kivy.properties import Clock
-from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
-from concurrent.futures import ThreadPoolExecutor
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.filemanager import MDFileManager
+
+import ebooklib
+from ebooklib import epub
 
 
 class TextLoading(Screen):

@@ -1,9 +1,7 @@
 import sqlite3
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import Clock
-from kivy.properties import StringProperty
+
+from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
-from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 

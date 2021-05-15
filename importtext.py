@@ -155,7 +155,7 @@ class ImportText(Screen):
         if text_title == '':
             return self.show_instructions('Please add title.')
 
-        if text_body_preview == '':
+        if text_body_preview == 'Preview of your text':
             return self.show_instructions('Please add text.')
 
         try:

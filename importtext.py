@@ -147,34 +147,6 @@ class ImportText(Screen):
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
 
-    def update_text_preview(self):
-        connection = sqlite3.connect('read_runner.db')
-        cursor = connection.cursor()
-
-        cursor.execute('SELECT * from temp_data')
-        new_text_preview = cursor.fetchone()[0][:500]
-
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text_preview
-
-    def save_temp_data(self, text_body):
-        connection = sqlite3.connect('read_runner.db')
-        cursor = connection.cursor()
-
-        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (text_body text, id integer primary key )')
-
-        cursor.execute('INSERT INTO temp_data(text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
-                       'SET text_body = text_body || (?)', (text_body, text_body))
-
-        connection.commit()
-
-    def clear_temp_database(self):
-        connection = sqlite3.connect('read_runner.db')
-
-        cursor = connection.cursor()
-        cursor.execute('DROP TABLE IF EXISTS temp_data')
-
-        connection.commit()
-
     def save_new_text(self):
         text_title = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_title_field.text
         text_author = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_author_field.text
@@ -242,6 +214,38 @@ class ImportText(Screen):
     def close_error_dialog(self, obj):
         self.error_dialog.dismiss()
 
-    def go_back(self):
+    @staticmethod
+    def update_text_preview():
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+
+        cursor.execute('SELECT * from temp_data')
+        new_text_preview = cursor.fetchone()[0][:500]
+
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = new_text_preview
+
+    @staticmethod
+    def save_temp_data(text_body):
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
+
+        cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (text_body text, id integer primary key )')
+
+        cursor.execute('INSERT INTO temp_data(text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
+                       'SET text_body = text_body || (?)', (text_body, text_body))
+
+        connection.commit()
+
+    @staticmethod
+    def clear_temp_database():
+        connection = sqlite3.connect('read_runner.db')
+
+        cursor = connection.cursor()
+        cursor.execute('DROP TABLE IF EXISTS temp_data')
+
+        connection.commit()
+
+    @staticmethod
+    def go_back():
         MDApp.get_running_app().root.get_screen("importtext").manager.transition.direction = 'right'
         MDApp.get_running_app().root.get_screen("importtext").manager.current = 'mainscreen'

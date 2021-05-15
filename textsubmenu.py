@@ -42,7 +42,7 @@ class TextSubMenu(Screen):
 
         self.delete_dialog.open()
 
-    def close_delete_dialog(self, obj=None):
+    def close_delete_dialog(self, obj):
         self.delete_dialog.dismiss()
 
     def close_text_sub_menu_dialog(self, obj):

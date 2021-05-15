@@ -74,13 +74,7 @@ class MainScreen(Screen):
 
             self.ids.container.add_widget(item)
 
-    def navigation_draw(self):
-        print('navigation_draw')
-        pass
-
     def import_text(self):
-        print('import_text')
-
         self.manager.transition.direction = 'left'
         self.manager.current = 'importtext'
 
@@ -129,9 +123,8 @@ class MainScreen(Screen):
 
         self.help = Help()
 
-    def close_app(self):
-        # MDApp.get_running_app().stop()
-        # ReadRunnerApp().get_running_app().stop()
+    @staticmethod
+    def close_app():
         exit()
 
 

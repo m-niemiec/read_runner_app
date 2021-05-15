@@ -3,6 +3,7 @@ from kivymd.app import MDApp
 
 
 class Help(Screen):
-    def go_back(self):
+    @staticmethod
+    def go_back():
         MDApp.get_running_app().root.get_screen("help").manager.transition.direction = 'right'
         MDApp.get_running_app().root.get_screen("help").manager.current = 'mainscreen'

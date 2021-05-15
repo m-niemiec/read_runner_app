@@ -45,7 +45,6 @@ class Preferences(Screen):
             self.preferences_data['word_size'] = size
 
     def save_new_preferences(self):
-        print(self.preferences_data)
         self.preferences_data['reading_speed'] = MDApp.get_running_app().root.get_screen("preferences").ids.reading_speed.text
 
         connection = sqlite3.connect('read_runner.db')
@@ -57,6 +56,7 @@ class Preferences(Screen):
         connection.commit()
         connection.close()
 
-    def go_back(self):
+    @staticmethod
+    def go_back():
         MDApp.get_running_app().root.get_screen("preferences").manager.transition.direction = 'right'
         MDApp.get_running_app().root.get_screen("preferences").manager.current = 'mainscreen'

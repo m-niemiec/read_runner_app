@@ -12,7 +12,6 @@ class ReadText(Screen):
     text_position = 0
     text_position_progress = 0
     event = None
-    my_string = StringProperty('a')
     progress = NumericProperty(0)
     progress_text = StringProperty('')
     text_db = None
@@ -73,7 +72,7 @@ class ReadText(Screen):
     def update_status(self, dt=None, progress=None):
         status_text_position = self.text_position + self.text_position_progress
         self.progress = 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
-        # self.progress = progress if progress else 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
+
         MDApp.get_running_app().root.get_screen("readtext").ids.progress_bar.value = self.progress
         MDApp.get_running_app().root.get_screen("readtext").ids.progress_text.text = str(self.progress)
 
@@ -96,7 +95,6 @@ class ReadText(Screen):
             self.reading_running = False
             self.text_position += self.text_position_progress
             self.text_position_progress = 0
-            self.my_string = 'stoppedreading'
 
     def update_data_db(self):
         connection = sqlite3.connect('read_runner.db')

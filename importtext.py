@@ -96,8 +96,9 @@ class ImportText(Screen):
         pdf_page_count = len(pdfplumber.open(text_file_path).pages)
 
         with pdfplumber.open(text_file_path) as pdf:
-            for page in pdf.pages[:50]:
-                import_progress = '{:.2f}'.format(i / pdf_page_count * 100)
+            for counter, page in enumerate(pdf.pages[:50], start=1):
+                import_progress = '{:.2f}'.format(counter / pdf_page_count * 100)
+                counter += 1
 
                 self.text_loading.import_progress = f'Imported - {import_progress}%'
 
@@ -132,8 +133,14 @@ class ImportText(Screen):
 
     def import_epub_file(self, text_file_path):
         book = epub.read_epub(text_file_path)
+        epub_page_count = len(book.items)
 
-        for item in book.get_items():
+        for counter, item in enumerate(book.get_items(), start=1):
+            import_progress = '{:.2f}'.format(counter / epub_page_count * 100)
+            counter += 1
+
+            self.text_loading.import_progress = f'Imported - {import_progress}%'
+
             if item.get_type() == ebooklib.ITEM_DOCUMENT:
                 self.save_temp_data(str(item.get_content()).replace('\\n', ''))
 

@@ -35,8 +35,6 @@ Window.size = (360, 780)
 
 class MainScreen(Screen):
     help_dialog = None
-    connection = None
-    cursor = None
     text_id = None
     readtext = None
     importtext = None
@@ -54,11 +52,12 @@ class MainScreen(Screen):
 
     def custom_on_enter(self, *args):
         self.ids.container.clear_widgets()
-        self.connection = sqlite3.connect('read_runner.db')
-        self.cursor = self.connection.cursor()
+
+        connection = sqlite3.connect('read_runner.db')
+        cursor = connection.cursor()
         sql_statement = 'SELECT * FROM texts'
-        self.cursor.execute(sql_statement)
-        texts = self.cursor.fetchall()
+        cursor.execute(sql_statement)
+        texts = cursor.fetchall()
 
         for text in texts:
             icon_left = IconLeftWidget(icon='book-open-variant' if text[3] == 'Book' else 'note-text-outline',
@@ -93,12 +92,11 @@ class MainScreen(Screen):
         self.text_sub_menu_dialog.open()
 
     def show_instructions(self):
-        if not self.help_dialog:
-            self.help_dialog = MDDialog(
-                text=helper_texts.help_dialog_text,
-                pos_hint={'center_x': 0.5, 'center_y': 0.5},
-                size_hint=(0.9, 0.8),
-                buttons=[MDFlatButton(text='CANCEL', on_release=self.close_help_dialog)])
+        self.help_dialog = MDDialog(
+            text=helper_texts.help_dialog_text,
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
+            size_hint=(0.9, 0.8),
+            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_help_dialog)])
 
         self.help_dialog.open()
 

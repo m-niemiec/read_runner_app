@@ -11,14 +11,12 @@ class ReadText(Screen):
     text_iterator = None
     text_position = 0
     text_position_progress = 0
-    event = None
+    get_next_word_event = None
     progress = NumericProperty(0)
     progress_text = StringProperty('')
     text_db = None
-    text_left = None
-    event_2 = None
+    update_status_event = None
     text_id = None
-    text_data = None
     preferences_data = None
 
     def __init__(self, text_id=None, **kwargs):
@@ -35,13 +33,14 @@ class ReadText(Screen):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM texts WHERE text_id = (?)', (self.text_id, ))
-        self.text_data = cursor.fetchone()
-        self.text_db = str(self.text_data[6]).split()
-        self.text_position = self.text_data[1]
-        self.progress = self.text_data[2]
+        text_data = cursor.fetchone()
+        self.text_db = str(text_data[6]).split()
+        self.text_position = text_data[1]
+        self.progress = text_data[2]
 
     def get_user_preferences(self):
         connection = sqlite3.connect('read_runner.db')
+
         cursor = connection.cursor()
         cursor.execute('SELECT * from preferences')
 
@@ -64,10 +63,10 @@ class ReadText(Screen):
     def start_reading(self):
         self.reading_running = True
         self.text_position_progress = 0
-        self.text_left = self.text_db[self.text_position:]
-        self.text_iterator = iter(self.text_left)
-        self.event = Clock.schedule_interval(self.get_next_word, 1.0/(int(self.preferences_data['reading_speed'])/60))
-        self.event_2 = Clock.schedule_interval(self.update_status, 1.0)
+        text_left = self.text_db[self.text_position:]
+        self.text_iterator = iter(text_left)
+        self.get_next_word_event = Clock.schedule_interval(self.get_next_word, 1.0/(int(self.preferences_data['reading_speed'])/60))
+        self.update_status_event = Clock.schedule_interval(self.update_status, 1.0)
 
     def update_status(self, dt=None, progress=None):
         status_text_position = self.text_position + self.text_position_progress
@@ -83,15 +82,15 @@ class ReadText(Screen):
         try:
             MDApp.get_running_app().root.get_screen('readtext').ids.text_word.text = next(self.text_iterator)
         except StopIteration:
-            self.event.cancel()
+            self.get_next_word_event.cancel()
             self.stop_reading()
 
         self.text_position_progress += 1
 
     def stop_reading(self):
         if self.reading_running:
-            self.event_2.cancel()
-            self.event.cancel()
+            self.update_status_event.cancel()
+            self.get_next_word_event.cancel()
             self.reading_running = False
             self.text_position += self.text_position_progress
             self.text_position_progress = 0
@@ -101,7 +100,6 @@ class ReadText(Screen):
         cursor = connection.cursor()
 
         cursor.execute('UPDATE texts SET text_position = (?) WHERE text_id = (?)', (self.text_position, self.text_id))
-
         cursor.execute('UPDATE texts SET text_progress = (?) WHERE text_id = (?)', (self.progress, self.text_id))
 
         connection.commit()

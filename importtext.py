@@ -29,7 +29,7 @@ class ImportText(Screen):
     text = None
     manager_open = False
     file_manager = None
-    warning_dialog = None
+    instructions_dialog = None
     text_loading_dialog = None
     new_text = None
     text_loading = None
@@ -41,29 +41,22 @@ class ImportText(Screen):
         super().__init__(**kw)
         self.clear_temp_database()
 
-    def import_from_clipboard(self):
-        self.imported_text = Clipboard.paste()
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{self.imported_text[:1000]} ... '
-
     def import_from_file(self):
-        path = '/'
         self.file_manager = MDFileManager(
             exit_manager=self.exit_manager,
             select_path=self.select_path
         )
         self.file_manager.ext = ['.txt', '.pdf', '.mobi', '.epub', '.TXT', '.PDF', '.MOBI', '.EPUB']
-        self.file_manager.show(path)
-        self.manager_open = True
-
-    def file_manager_open(self):
         self.file_manager.show('/')
         self.manager_open = True
 
     def select_path(self, path):
         text_file_path = path
         toast(text_file_path)
-        self.text_loading()
+
+        self.show_text_loading()
         self.exit_manager()
+
         executor = ThreadPoolExecutor(5)
         executor.submit(partial(self.determine_file_type, text_file_path))
 
@@ -179,18 +172,18 @@ class ImportText(Screen):
         self.clear_temp_database()
 
     def show_instructions(self, warning_text):
-        self.warning_dialog = MDDialog(
+        self.instructions_dialog = MDDialog(
             text=warning_text,
             pos_hint={'center_x': 0.5, 'center_y': 0.5},
             size_hint=(0.9, 0.8),
-            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_help_dialog)])
+            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_instructions_dialog)])
 
-        self.warning_dialog.open()
+        self.instructions_dialog.open()
 
-    def close_help_dialog(self, obj):
-        self.warning_dialog.dismiss()
+    def close_instructions_dialog(self, obj):
+        self.instructions_dialog.dismiss()
 
-    def text_loading(self):
+    def show_text_loading(self):
         self.text_loading = TextLoading()
 
         self.text_loading_dialog = MDDialog(
@@ -212,6 +205,11 @@ class ImportText(Screen):
 
     def close_error_dialog(self, obj):
         self.error_dialog.dismiss()
+
+    @staticmethod
+    def import_from_clipboard():
+        imported_text = Clipboard.paste()
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{imported_text[:1000]} ... '
 
     @staticmethod
     def update_text_preview():

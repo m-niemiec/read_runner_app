@@ -49,6 +49,7 @@ class Preferences(Screen):
 
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
+
         cursor.execute('DROP TABLE preferences')
         cursor.execute('CREATE TABLE preferences (data json)')
         cursor.execute('INSERT INTO preferences VALUES (?)', [json.dumps(self.preferences_data)])

@@ -8,7 +8,6 @@ from kivymd.uix.dialog import MDDialog
 
 class TextSubMenu(Screen):
     text_progress = None
-    text_data = None
     delete_dialog = None
     text_position = None
     text_length = None
@@ -25,20 +24,19 @@ class TextSubMenu(Screen):
         cursor = connection.cursor()
         cursor.execute('SELECT * from texts WHERE text_id = ?', (self.text_id,))
 
-        self.text_data = cursor.fetchone()
-        self.text_position = self.text_data[1]
-        self.text_progress = self.text_data[2]
-        self.text_length = len(str(self.text_data[6]).split())
+        text_data = cursor.fetchone()
+        self.text_position = text_data[1]
+        self.text_progress = text_data[2]
+        self.text_length = len(str(text_data[6]).split())
 
     def delete_selected_text(self):
-        if not self.delete_dialog:
-            self.delete_dialog = MDDialog(
-                title='WARNING!',
-                text='Are you sure that you want to delete this text?',
-                pos_hint={'center_x': 0.5, 'center_y': 0.5},
-                size_hint=(0.9, 0.8),
-                buttons=[MDFlatButton(text="YES, delete it!", on_release=self.confirm_deletion),
-                         MDFlatButton(text="NO, take me back!", on_release=self.close_delete_dialog)])
+        self.delete_dialog = MDDialog(
+            title='WARNING!',
+            text='Are you sure that you want to delete this text?',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
+            size_hint=(0.9, 0.8),
+            buttons=[MDFlatButton(text="YES, delete it!", on_release=self.confirm_deletion),
+                     MDFlatButton(text="NO, take me back!", on_release=self.close_delete_dialog)])
 
         self.delete_dialog.open()
 
@@ -48,8 +46,10 @@ class TextSubMenu(Screen):
     def close_text_sub_menu_dialog(self, obj):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
+
         cursor.execute('UPDATE texts SET text_progress = ? WHERE text_id = ?', (self.text_progress, self.text_id))
         cursor.execute('UPDATE texts SET text_position = ? WHERE text_id = ?', (int(self.text_position), self.text_id))
+
         connection.commit()
 
         MDApp.get_running_app().root.get_screen('mainscreen').custom_on_enter()
@@ -58,11 +58,14 @@ class TextSubMenu(Screen):
     def confirm_deletion(self, obj):
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
-        cursor.execute('DELETE FROM texts WHERE text_id = ?', (self.text_id,))
+
+        cursor.execute('DELETE FROM texts WHERE text_id = ?', (self.text_id, ))
+
         connection.commit()
 
         MDApp.get_running_app().root.get_screen('mainscreen').custom_on_enter()
         MDApp.get_running_app().root.get_screen('mainscreen').text_sub_menu_dialog.dismiss()
+
         self.close_delete_dialog()
 
     def move_progress_backward(self):

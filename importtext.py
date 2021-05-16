@@ -43,7 +43,7 @@ class ImportText(Screen):
 
     def import_from_clipboard(self):
         self.imported_text = Clipboard.paste()
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{self.imported_text[:600]} ... '
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{self.imported_text[:500]} ... '
 
     def import_from_file(self):
         path = '/'
@@ -87,7 +87,7 @@ class ImportText(Screen):
         with open(text_file_path, encoding='utf-8-sig') as file:
             new_text = file.readlines()
 
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:600]} ... '
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:500]} ... '
 
         self.save_temp_data(new_text)
         self.text_loading_dialog.dismiss()
@@ -142,7 +142,7 @@ class ImportText(Screen):
             self.text_loading.import_progress = f'Imported - {import_progress}%'
 
             if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                self.save_temp_data(str(item.get_content()).replace('\\n', ''))
+                self.save_temp_data(html2text.html2text(str(item.get_content()).replace('\\n', '')))
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -220,7 +220,7 @@ class ImportText(Screen):
         cursor = connection.cursor()
 
         cursor.execute('SELECT * from temp_data')
-        new_text_preview = cursor.fetchone()[0][:600]
+        new_text_preview = cursor.fetchone()[0][:500]
 
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text_preview} ... '
 

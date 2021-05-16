@@ -43,7 +43,7 @@ class ImportText(Screen):
 
     def import_from_clipboard(self):
         self.imported_text = Clipboard.paste()
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{self.imported_text[:500]} ... '
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{self.imported_text[:1000]} ... '
 
     def import_from_file(self):
         path = '/'
@@ -87,7 +87,7 @@ class ImportText(Screen):
         with open(text_file_path, encoding='utf-8-sig') as file:
             new_text = file.readlines()
 
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:500]} ... '
+        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:1000]} ... '
 
         self.save_temp_data(new_text)
         self.text_loading_dialog.dismiss()
@@ -194,7 +194,6 @@ class ImportText(Screen):
         self.text_loading = TextLoading()
 
         self.text_loading_dialog = MDDialog(
-            title='Please wait ...',
             type='custom',
             content_cls=self.text_loading,
             auto_dismiss=False)
@@ -220,7 +219,7 @@ class ImportText(Screen):
         cursor = connection.cursor()
 
         cursor.execute('SELECT * from temp_data')
-        new_text_preview = cursor.fetchone()[0][:500]
+        new_text_preview = cursor.fetchone()[0][:1000]
 
         MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_field.text = f'{new_text_preview} ... '
 

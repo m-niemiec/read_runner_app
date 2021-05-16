@@ -123,15 +123,32 @@
                 size_hint: (0.05, 0.05)
 
 <TextLoading>
+    height: '160dp'
+
     BoxLayout:
         orientation: 'vertical'
+        size_hint_y: None
 
-        MDLabel:
-            id: import_progress
-            text: root.import_progress
+        FloatLayout:
+            MDLabel:
+                text: 'Please wait'
+                theme_text_color: 'Primary'
+                pos_hint: {'x': 0.0, 'y': 3.0}
+                font_style: 'H5'
 
-        MDSpinner:
-            size_hint: None, None
-            size: dp(46), dp(46)
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            active: True
+            MDLabel:
+                id: import_progress
+                text: root.import_progress
+                theme_text_color: 'Secondary'
+                pos_hint: {'x': 0.0, 'y': 2.2}
+
+            MDLabel:
+                text: '(it may take several minutes)'
+                theme_text_color: 'Hint'
+                pos_hint: {'x': 0.0, 'y': 1.4}
+
+            MDSpinner:
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                active: True

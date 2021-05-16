@@ -15,3 +15,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Temp/WIP files
+temp.py
+temp_text.py

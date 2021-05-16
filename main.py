@@ -63,8 +63,8 @@ class MainScreen(Screen):
             icon_left = IconLeftWidget(icon='book-open-variant' if text[3] == 'Book' else 'note-text-outline',
                                        on_release=partial(self.select_text, text[0]))
             icon_right = IconRightWidget(icon='dots-vertical', on_release=partial(self.show_text_sub_menu, text[0]))
-            item = ThreeLineAvatarIconListItem(text=str(text[5]),
-                                               secondary_text=str(text[4]),
+            item = ThreeLineAvatarIconListItem(text=str(text[4]),
+                                               secondary_text=str(text[5]),
                                                tertiary_text=f'Progress - {text[2]}%',
                                                on_release=partial(self.select_text, text[0]))
 

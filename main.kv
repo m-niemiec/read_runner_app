@@ -30,7 +30,7 @@ ScreenManager:
 
         MDBottomAppBar:
             MDToolbar:
-                mode: "free-end"
+                mode: 'free-end'
                 right_action_items: [['plus', lambda x: app.root.get_screen('mainscreen').import_text()]]
                 icon: ''
                 icon_width: 0
@@ -57,28 +57,28 @@ ScreenManager:
                         secondary_text: '[size=13dp]Import new book to read.[/size]'
                         on_release: app.root.get_screen('mainscreen').import_text()
                         IconLeftWidget:
-                            icon: "plus"
+                            icon: 'plus'
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Preferences[/size]'
                         secondary_text: '[size=13dp]Change various settings.[/size]'
                         on_release: app.root.get_screen('mainscreen').view_preferences()
                         IconLeftWidget:
-                            icon: "account-cog"
+                            icon: 'account-cog'
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Help[/size]'
                         secondary_text: '[size=13dp]Learn more about ReadRunner.[/size]'
                         on_release: app.root.get_screen('mainscreen').view_help()
                         IconLeftWidget:
-                            icon: "help-circle"
+                            icon: 'help-circle'
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Exit[/size]'
                         secondary_text: '[size=13dp]Close ReadRunner.[/size]'
                         on_release: app.root.get_screen('mainscreen').close_app()
                         IconLeftWidget:
-                            icon: "close-circle-outline"
+                            icon: 'close-circle-outline'
 
             MDLabel:
                 text: 'Quick tips:'

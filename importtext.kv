@@ -18,7 +18,7 @@
             text: 'Copy text from clipboard'
             font_style: 'H4'
             on_release: app.root.get_screen('mainscreen').importtext.import_from_clipboard()
-            pos_hint: {"center_x": .5, "center_y": .5}
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: (0.95, 0.2)
             elevation: 10
 
@@ -26,7 +26,7 @@
             text: 'Import text from file (.txt .pdf .mobi .epub)'
             font_style: 'H4'
             on_release: app.root.get_screen('mainscreen').importtext.import_from_file()
-            pos_hint: {"center_x": .5, "center_y": .5}
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: (0.95, 0.2)
             elevation: 10
 
@@ -40,7 +40,7 @@
                 multiline: False
                 hint_text: 'Title'
                 text: ''
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 size_hint_x: 0.9
 
             MDTextField:
@@ -48,14 +48,14 @@
                 multiline: False
                 hint_text: 'Author'
                 text: ''
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 size_hint_x: 0.9
 
         MDLabel:
             id: imported_text_field
             multiline: True
             text: ' (import text to see preview ...)'
-            pos_hint: {"center_x": .5, "center_y": .5}
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: (0.95, 1.0)
             max_lines: 15
             theme_text_color: 'Secondary'
@@ -74,7 +74,7 @@
 
             MDLabel:
                 text: 'Select text type:'
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 size_hint: (0.95, 0.2)
                 font_size: 35
                 theme_text_color: 'Primary'
@@ -84,12 +84,12 @@
                 adaptive_height: True
                 padding: 20
                 size_hint: (0.9, 0.5)
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 MDLabel:
                     text: 'Book'
                     font_size: 30
-                    halign: "center"
+                    halign: 'center'
                     theme_text_color: 'Secondary'
 
                 MDCheckbox:
@@ -100,7 +100,7 @@
 
                 MDLabel:
                     text: 'Article'
-                    halign: "center"
+                    halign: 'center'
                     font_size: 30
                     theme_text_color: 'Secondary'
 
@@ -114,7 +114,7 @@
                 text: 'Save new Text!'
                 font_style: 'H4'
                 on_release: app.root.get_screen('mainscreen').importtext.save_new_text()
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 size_hint: (0.75, 0.3)
                 elevation: 10
 
@@ -133,5 +133,5 @@
         MDSpinner:
             size_hint: None, None
             size: dp(46), dp(46)
-            pos_hint: {'center_x': .5, 'center_y': .5}
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             active: True

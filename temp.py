@@ -15,7 +15,7 @@ c.execute('INSERT INTO texts VALUES (2, 0, 0, "Test Type2","Test Author2", "HP",
 c.execute('CREATE TABLE preferences (data json)')
 
 preferences = {
-    'reading_speed': '100',
+    'reading_speed': '120',
     'word_brightness': 'bright',
     'word_size': 'medium'
 }

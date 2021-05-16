@@ -58,6 +58,7 @@ ScreenManager:
                         on_release: app.root.get_screen('mainscreen').import_text()
                         IconLeftWidget:
                             icon: 'plus'
+                            on_release: app.root.get_screen('mainscreen').import_text()
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Preferences[/size]'
@@ -65,6 +66,7 @@ ScreenManager:
                         on_release: app.root.get_screen('mainscreen').view_preferences()
                         IconLeftWidget:
                             icon: 'account-cog'
+                            on_release: app.root.get_screen('mainscreen').view_preferences()
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Help[/size]'
@@ -72,6 +74,7 @@ ScreenManager:
                         on_release: app.root.get_screen('mainscreen').view_help()
                         IconLeftWidget:
                             icon: 'help-circle'
+                            on_release: app.root.get_screen('mainscreen').view_help()
 
                     TwoLineIconListItem:
                         text: '[size=20dp]Exit[/size]'
@@ -79,6 +82,7 @@ ScreenManager:
                         on_release: app.root.get_screen('mainscreen').close_app()
                         IconLeftWidget:
                             icon: 'close-circle-outline'
+                            on_release: app.root.get_screen('mainscreen').close_app()
 
             MDLabel:
                 text: 'Quick tips:'

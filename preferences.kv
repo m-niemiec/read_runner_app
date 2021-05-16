@@ -13,71 +13,152 @@
             left_action_items: [['keyboard-backspace', lambda x: app.root.get_screen('preferences').go_back()]]
             elevation: 10
 
-        MDLabel:
-            text: 'Change reading speed:'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint: (1.0, 0.5)
 
-        GridLayout:
-            cols: 2
-
-            MDLabel:
-                text: 'Speed (in words per minute):'
-            MDTextField:
-                hint_text: 'Number between 30 and 600'
-                id: reading_speed
-                text: '120'
-
-        MDLabel:
-            text: 'Change word size:'
-
-        GridLayout:
-            cols: 6
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint: (1.0, 0.4)
 
             MDLabel:
-                text: 'Small'
-            MDCheckbox:
-                id: checkbox_word_size_small
-                active: False
-                group: 'size'
-                on_active: app.root.get_screen('preferences').change_word_size('small')
+                text: 'Change reading speed:'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: (0.95, 0.2)
+                font_size: 35
+                theme_text_color: 'Primary'
 
             MDLabel:
-                text: 'Medium'
-            MDCheckbox:
-                id: checkbox_word_size_medium
-                active: False
-                group: 'size'
-                on_active: app.root.get_screen('preferences').change_word_size('medium')
+                text: '(in words per minute)'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: (0.95, 0.2)
+                font_size: 30
+                theme_text_color: 'Hint'
+
+            GridLayout:
+                cols: 2
+                size_hint: (0.95, 0.2)
+
+                MDLabel:
+                    text: 'Speed:'
+                    font_size: 30
+                    halign: 'center'
+                    valign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDTextField:
+                    hint_text: 'Number between 30 and 600'
+                    id: reading_speed
+                    text: '120'
+                    valign: 'center'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint: (1.0, 0.4)
 
             MDLabel:
-                text: 'Large'
-            MDCheckbox:
-                id: checkbox_word_size_large
-                active: False
-                group: 'size'
-                on_active: app.root.get_screen('preferences').change_word_size('large')
+                text: 'Change word size:'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: (0.95, 0.2)
+                font_size: 35
+                theme_text_color: 'Primary'
 
-        MDLabel:
-            text: 'Choose brightness of text word:'
+            GridLayout:
+                cols: 6
+                size_hint: (0.95, 0.1)
 
-        GridLayout:
-            cols: 4
+                MDLabel:
+                    text: 'Small'
+                    font_size: 30
+                    halign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDCheckbox:
+                    id: checkbox_word_size_small
+                    active: False
+                    group: 'size'
+                    on_active: app.root.get_screen('preferences').change_word_size('small')
+                    size_hint: (0.5, 1.0)
+
+                MDLabel:
+                    text: 'Medium'
+                    font_size: 30
+                    halign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDCheckbox:
+                    id: checkbox_word_size_medium
+                    active: False
+                    group: 'size'
+                    on_active: app.root.get_screen('preferences').change_word_size('medium')
+                    size_hint: (0.5, 1.0)
+
+                MDLabel:
+                    text: 'Large'
+                    font_size: 30
+                    halign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDCheckbox:
+                    id: checkbox_word_size_large
+                    active: False
+                    group: 'size'
+                    on_active: app.root.get_screen('preferences').change_word_size('large')
+                    size_hint: (0.5, 1.0)
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint: (1.0, 0.4)
 
             MDLabel:
-                text: 'Bright'
-            MDCheckbox:
-                id: checkbox_brightness_bright
-                active: False
-                group: 'brightness'
-                on_active: app.root.get_screen('preferences').change_word_brightness('bright')
+                text: 'Choose brightness of text word:'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: (0.95, 0.2)
+                font_size: 35
+                theme_text_color: 'Primary'
 
-            MDLabel:
-                text: 'Dark'
-            MDCheckbox:
-                id: checkbox_brightness_dark
-                active: False
-                group: 'brightness'
-                on_active: app.root.get_screen('preferences').change_word_brightness('dark')
+            GridLayout:
+                cols: 4
+                size_hint: (0.95, 0.1)
 
-        MDFlatButton:
-            text: 'Save Preferences'
-            on_release: app.root.get_screen('preferences').save_new_preferences()
+                MDLabel:
+                    text: 'Bright'
+                    font_size: 30
+                    halign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDCheckbox:
+                    id: checkbox_brightness_bright
+                    active: False
+                    group: 'brightness'
+                    on_active: app.root.get_screen('preferences').change_word_brightness('bright')
+                    size_hint: (0.5, 2.5)
+
+                MDLabel:
+                    text: 'Dark'
+                    font_size: 30
+                    halign: 'center'
+                    theme_text_color: 'Secondary'
+
+                MDCheckbox:
+                    id: checkbox_brightness_dark
+                    active: False
+                    group: 'brightness'
+                    on_active: app.root.get_screen('preferences').change_word_brightness('dark')
+                    size_hint: (0.5, 2.5)
+
+        FloatLayout:
+            orientation: 'vertical'
+            spacing: 20
+
+            MDFillRoundFlatButton:
+                text: 'Save Preferences'
+                font_style: 'H4'
+                on_release: app.root.get_screen('preferences').save_new_preferences()
+                pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+                size_hint: (0.75, 0.15)
+                elevation: 10

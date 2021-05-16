@@ -56,10 +56,10 @@ class ReadText(Screen):
         elif self.preferences_data['word_size'] == 'large':
             MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'H4'
 
-        if self.preferences_data['word_size'] == 'bright':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Primary'
-        elif self.preferences_data['word_size'] == 'dark':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Hint'
+        if self.preferences_data['word_brightness'] == 'bright':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.theme_text_color = 'Primary'
+        elif self.preferences_data['word_brightness'] == 'dark':
+            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.theme_text_color = 'Hint'
 
     def start_reading(self):
         self.reading_running = True

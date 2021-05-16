@@ -11,24 +11,27 @@
             left_action_items: [['keyboard-backspace', lambda x: app.root.get_screen('mainscreen').readtext.go_back()]]
             elevation: 10
 
-        MDLabel:
-            id: text_word
-            text: 'Thyroparathyroidectomized'
-            halign: "center"
-            pos_hint_y: None
-            font_style: 'H1'
-            theme_text_color: 'Hint'
+        FloatLayout:
+            MDLabel:
+                id: text_word
+                text: 'Thyroparathyroidectomized'
+                halign: "center"
+                font_style: 'H1'
+                theme_text_color: 'Hint'
+                pos_hint: {'x': 0.0, 'y': 0.0}
 
-        MDLabel:
-            id: progress_text
-            text: ''
-            pos_hint: {'x': 0.5, 'y': 0.5}
+            MDLabel:
+                id: progress_text
+                text: ''
+                halign: "center"
+                theme_text_color: 'Hint'
+                pos_hint: {'x': 0.0, 'y': -0.38}
 
-        MDProgressBar:
-            id: progress_bar
-            value: 0
-            size_hint: (0.9, 1.0)
-            pos_hint: {'x': 0.05, 'y': 0.5}
+            MDProgressBar:
+                id: progress_bar
+                value: 0
+                size_hint: (0.9, 1.0)
+                pos_hint: {'x': 0.05, 'y': -0.4}
 
         MDBottomAppBar:
             MDToolbar:

@@ -74,7 +74,7 @@ class ReadText(Screen):
         self.progress = 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
 
         MDApp.get_running_app().root.get_screen("readtext").ids.progress_bar.value = self.progress
-        MDApp.get_running_app().root.get_screen("readtext").ids.progress_text.text = str(self.progress)
+        MDApp.get_running_app().root.get_screen("readtext").ids.progress_text.text = f'Progress - {self.progress}%'
 
     def get_next_word(self, dt):
         if not self.reading_running:

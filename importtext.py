@@ -148,9 +148,9 @@ class ImportText(Screen):
         self.text_loading_dialog.dismiss()
 
     def save_new_text(self):
-        text_title = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_title_field.text
-        text_author = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_author_field.text
-        text_body_preview = MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text
+        text_title = MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_title_field.text
+        text_author = MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_author_field.text
+        text_body_preview = MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_field.text
 
         if text_title == '':
             return self.show_instructions('Please add title.')
@@ -159,7 +159,7 @@ class ImportText(Screen):
             return self.show_instructions('Please add text.')
 
         try:
-            text_type = MDApp.get_running_app().root.get_screen("importtext").imported_text_type
+            text_type = MDApp.get_running_app().root.get_screen('importtext').imported_text_type
         except AttributeError:
             return self.show_instructions('Please select text type.')
 
@@ -183,7 +183,7 @@ class ImportText(Screen):
             text=warning_text,
             pos_hint={'center_x': 0.5, 'center_y': 0.5},
             size_hint=(0.9, 0.8),
-            buttons=[MDFlatButton(text="CANCEL", on_release=self.close_help_dialog)])
+            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_help_dialog)])
 
         self.warning_dialog.open()
 
@@ -207,7 +207,7 @@ class ImportText(Screen):
             text=error_text,
             pos_hint={'center_x': 0.5, 'center_y': 0.5},
             size_hint=(0.9, 0.8),
-            buttons=[MDFlatButton(text="CANCEL", on_release=self.close_error_dialog)])
+            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_error_dialog)])
 
         self.error_dialog.open()
 
@@ -222,7 +222,7 @@ class ImportText(Screen):
         cursor.execute('SELECT * from temp_data')
         new_text_preview = cursor.fetchone()[0][:500]
 
-        MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text_preview} ... '
+        MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_field.text = f'{new_text_preview} ... '
 
     @staticmethod
     def save_temp_data(text_body):
@@ -247,5 +247,5 @@ class ImportText(Screen):
 
     @staticmethod
     def go_back():
-        MDApp.get_running_app().root.get_screen("importtext").manager.transition.direction = 'right'
-        MDApp.get_running_app().root.get_screen("importtext").manager.current = 'mainscreen'
+        MDApp.get_running_app().root.get_screen('importtext').manager.transition.direction = 'right'
+        MDApp.get_running_app().root.get_screen('importtext').manager.current = 'mainscreen'

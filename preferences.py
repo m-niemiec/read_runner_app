@@ -22,19 +22,19 @@ class Preferences(Screen):
 
         self.preferences_data = json.loads(cursor.fetchone()[0])
 
-        MDApp.get_running_app().root.get_screen("preferences").ids.reading_speed.text = self.preferences_data['reading_speed']
+        MDApp.get_running_app().root.get_screen('preferences').ids.reading_speed.text = self.preferences_data['reading_speed']
 
         if self.preferences_data['word_size'] == 'small':
-            MDApp.get_running_app().root.get_screen("preferences").ids.checkbox_word_size_small.active = True
+            MDApp.get_running_app().root.get_screen('preferences').ids.checkbox_word_size_small.active = True
         elif self.preferences_data['word_size'] == 'medium':
-            MDApp.get_running_app().root.get_screen("preferences").ids.checkbox_word_size_medium.active = True
+            MDApp.get_running_app().root.get_screen('preferences').ids.checkbox_word_size_medium.active = True
         else:
-            MDApp.get_running_app().root.get_screen("preferences").ids.checkbox_word_size_large.active = True
+            MDApp.get_running_app().root.get_screen('preferences').ids.checkbox_word_size_large.active = True
 
         if self.preferences_data['word_brightness'] == 'bright':
-            MDApp.get_running_app().root.get_screen("preferences").ids.checkbox_brightness_bright.active = True
+            MDApp.get_running_app().root.get_screen('preferences').ids.checkbox_brightness_bright.active = True
         else:
-            MDApp.get_running_app().root.get_screen("preferences").ids.checkbox_brightness_dark.active = True
+            MDApp.get_running_app().root.get_screen('preferences').ids.checkbox_brightness_dark.active = True
 
     def change_word_brightness(self, brightness):
         if brightness and self.preferences_data and brightness != self.preferences_data['word_brightness']:
@@ -45,18 +45,18 @@ class Preferences(Screen):
             self.preferences_data['word_size'] = size
 
     def save_new_preferences(self):
-        self.preferences_data['reading_speed'] = MDApp.get_running_app().root.get_screen("preferences").ids.reading_speed.text
+        self.preferences_data['reading_speed'] = MDApp.get_running_app().root.get_screen('preferences').ids.reading_speed.text
 
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
-        cursor.execute("DROP TABLE preferences")
-        cursor.execute("CREATE TABLE preferences (data json)")
-        cursor.execute("INSERT INTO preferences VALUES (?)", [json.dumps(self.preferences_data)])
+        cursor.execute('DROP TABLE preferences')
+        cursor.execute('CREATE TABLE preferences (data json)')
+        cursor.execute('INSERT INTO preferences VALUES (?)', [json.dumps(self.preferences_data)])
 
         connection.commit()
         connection.close()
 
     @staticmethod
     def go_back():
-        MDApp.get_running_app().root.get_screen("preferences").manager.transition.direction = 'right'
-        MDApp.get_running_app().root.get_screen("preferences").manager.current = 'mainscreen'
+        MDApp.get_running_app().root.get_screen('preferences').manager.transition.direction = 'right'
+        MDApp.get_running_app().root.get_screen('preferences').manager.current = 'mainscreen'

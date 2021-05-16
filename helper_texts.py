@@ -1,4 +1,4 @@
-help_dialog_text = """
+help_dialog_text = '''
 Hi! Thank you for downloading my app.
 
 Here is a quick guide:
@@ -11,14 +11,14 @@ There you will be able to either paste copied text or select file to import.
  - In top left corner there is a Menu button where you will find more help and options.
 
 Enjoy!
-"""
+'''
 
-help_screen_text = """
+help_screen_text = '''
 Hello! You are now on a help page for app Read Runner.
 
 This app was created in order to help you read books and various texts faster.
 It can be achieved by showing a word after word from given book in one place.
-You will be able to consume contents of a book much faster because you won't need to actually "move" your eyes in search for next word.
+You will be able to consume contents of a book much faster because you won't need to actually 'move' your eyes in search for next word.
 Try it!
 
 On main screen you can see a list of you all books with your progress.
@@ -47,4 +47,4 @@ Word brightness determines if the word on the screen will be light or more dim.
 I hope that was helpful!
 
 This app was created by Michał Niemiec.
-"""
+'''

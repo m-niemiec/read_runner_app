@@ -50,16 +50,16 @@ class ReadText(Screen):
 
     def use_user_preferences(self):
         if self.preferences_data['word_size'] == 'small':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'Body1'
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.font_style = 'Body1'
         elif self.preferences_data['word_size'] == 'medium':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'H5'
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.font_style = 'H5'
         elif self.preferences_data['word_size'] == 'large':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.font_style = 'H4'
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.font_style = 'H4'
 
         if self.preferences_data['word_brightness'] == 'bright':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.theme_text_color = 'Primary'
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.theme_text_color = 'Primary'
         elif self.preferences_data['word_brightness'] == 'dark':
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.theme_text_color = 'Hint'
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.theme_text_color = 'Hint'
 
     def start_reading(self):
         self.reading_running = True
@@ -73,15 +73,15 @@ class ReadText(Screen):
         status_text_position = self.text_position + self.text_position_progress
         self.progress = 100 - int((len(self.text_db[status_text_position:]) * 100 / len(self.text_db)))
 
-        MDApp.get_running_app().root.get_screen("readtext").ids.progress_bar.value = self.progress
-        MDApp.get_running_app().root.get_screen("readtext").ids.progress_text.text = f'Progress - {self.progress}%'
+        MDApp.get_running_app().root.get_screen('readtext').ids.progress_bar.value = self.progress
+        MDApp.get_running_app().root.get_screen('readtext').ids.progress_text.text = f'Progress - {self.progress}%'
 
     def get_next_word(self, dt):
         if not self.reading_running:
             return
 
         try:
-            MDApp.get_running_app().root.get_screen("readtext").ids.text_word.text = next(self.text_iterator)
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.text = next(self.text_iterator)
         except StopIteration:
             self.event.cancel()
             self.stop_reading()
@@ -137,5 +137,5 @@ class ReadText(Screen):
         self.stop_reading()
         self.update_data_db()
 
-        MDApp.get_running_app().root.get_screen("readtext").manager.transition.direction = 'right'
-        MDApp.get_running_app().root.get_screen("readtext").manager.current = 'mainscreen'
+        MDApp.get_running_app().root.get_screen('readtext').manager.transition.direction = 'right'
+        MDApp.get_running_app().root.get_screen('readtext').manager.current = 'mainscreen'

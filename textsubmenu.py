@@ -42,7 +42,7 @@ class TextSubMenu(Screen):
 
         self.delete_dialog.open()
 
-    def close_delete_dialog(self, obj):
+    def close_delete_dialog(self, obj=None):
         self.delete_dialog.dismiss()
 
     def close_text_sub_menu_dialog(self, obj):
@@ -52,8 +52,8 @@ class TextSubMenu(Screen):
         cursor.execute('UPDATE texts SET text_position = ? WHERE text_id = ?', (int(self.text_position), self.text_id))
         connection.commit()
 
-        MDApp.get_running_app().root.get_screen("mainscreen").custom_on_enter()
-        MDApp.get_running_app().root.get_screen("mainscreen").text_sub_menu_dialog.dismiss()
+        MDApp.get_running_app().root.get_screen('mainscreen').custom_on_enter()
+        MDApp.get_running_app().root.get_screen('mainscreen').text_sub_menu_dialog.dismiss()
 
     def confirm_deletion(self, obj):
         connection = sqlite3.connect('read_runner.db')
@@ -61,8 +61,8 @@ class TextSubMenu(Screen):
         cursor.execute('DELETE FROM texts WHERE text_id = ?', (self.text_id,))
         connection.commit()
 
-        MDApp.get_running_app().root.get_screen("mainscreen").custom_on_enter()
-        MDApp.get_running_app().root.get_screen("mainscreen").text_sub_menu_dialog.dismiss()
+        MDApp.get_running_app().root.get_screen('mainscreen').custom_on_enter()
+        MDApp.get_running_app().root.get_screen('mainscreen').text_sub_menu_dialog.dismiss()
         self.close_delete_dialog()
 
     def move_progress_backward(self):
@@ -88,5 +88,5 @@ class TextSubMenu(Screen):
         self.update_text_progress_label()
 
     def update_text_progress_label(self):
-        MDApp.get_running_app().root.get_screen("mainscreen").textsubmenu.ids.progress_text.text = str(
+        MDApp.get_running_app().root.get_screen('mainscreen').textsubmenu.ids.progress_text.text = str(
             f'You changed your progress to {self.text_progress}% !')

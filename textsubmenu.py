@@ -31,7 +31,7 @@ class TextSubMenu(Screen):
 
     def delete_selected_text(self):
         self.delete_dialog = MDDialog(
-            title='WARNING!',
+            title='[color=ff0000]WARNING![/color]',
             text='Are you sure that you want to delete this text?',
             pos_hint={'center_x': 0.5, 'center_y': 0.5},
             size_hint=(0.9, 0.8),

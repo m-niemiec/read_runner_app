@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from functools import partial
 
 from kivy.core.window import Window
@@ -24,7 +25,7 @@ if platform == 'android':
     request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 '''
-Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (from pip, NOT from master branch on GitHub).
+Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (currently from pip, NOT from master branch on GitHub).
 List of changes made to source file of KivyMD:
     - dialog.py - lines 504 and 507. Changed width values to fix problem with custom type MDDialog.
 '''
@@ -44,6 +45,11 @@ class MainScreen(Screen):
     preferences = None
     help = None
 
+    try:
+        pass
+    except sqlite3.OperationalError:
+        pass
+
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -53,6 +59,7 @@ class MainScreen(Screen):
     def custom_on_enter(self, *args):
         self.ids.container.clear_widgets()
 
+        # connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         connection = sqlite3.connect('read_runner.db')
         cursor = connection.cursor()
         sql_statement = 'SELECT * FROM texts'
@@ -83,7 +90,6 @@ class MainScreen(Screen):
         self.textsubmenu = TextSubMenu(text_id)
 
         self.text_sub_menu_dialog = MDDialog(
-            # title='Settings',
             type='custom',
             content_cls=self.textsubmenu,
             auto_dismiss=False,

@@ -148,7 +148,7 @@ class ImportText(Screen):
         if text_title == '':
             return self.show_instructions('Please add title.')
 
-        if text_body_preview == 'Preview of your text':
+        if text_body_preview == ' (import text to see preview ...)' or text_body_preview == '':
             return self.show_instructions('Please add text.')
 
         try:
@@ -168,6 +168,8 @@ class ImportText(Screen):
 
         connection.commit()
         connection.close()
+
+        self.go_back()
 
         self.clear_temp_database()
 
@@ -228,8 +230,7 @@ class ImportText(Screen):
 
         cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (text_body text, id integer primary key )')
 
-        cursor.execute('INSERT INTO temp_data(text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE '
-                       'SET text_body = text_body || (?)', (text_body, text_body))
+        cursor.execute('INSERT INTO temp_data(text_body, id) VALUES (?, 1) ON CONFLICT (id) DO UPDATE SET text_body = text_body || (?)', (text_body, text_body))
 
         connection.commit()
 
@@ -246,3 +247,7 @@ class ImportText(Screen):
     def go_back():
         MDApp.get_running_app().root.get_screen('importtext').manager.transition.direction = 'right'
         MDApp.get_running_app().root.get_screen('importtext').manager.current = 'mainscreen'
+
+        MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_title_field.text = ''
+        MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_author_field.text = ''
+        MDApp.get_running_app().root.get_screen('importtext').ids.imported_text_field.text = ' (import text to see preview ...)'

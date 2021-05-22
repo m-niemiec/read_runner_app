@@ -1,3 +1,4 @@
+import os
 import re
 import shutil
 import sqlite3
@@ -10,6 +11,7 @@ import pdfplumber
 from kivy.core.clipboard import Clipboard
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
+from kivy.utils import platform
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.button import MDFlatButton
@@ -19,12 +21,16 @@ from kivymd.uix.filemanager import MDFileManager
 import ebooklib
 from ebooklib import epub
 
+if platform == 'android':
+    from android.storage import primary_external_storage_path
+
 
 class TextLoading(Screen):
     import_progress = StringProperty('Estimating file size ...')
 
 
 class ImportText(Screen):
+    primary_ext_storage = primary_external_storage_path()
     imported_text = StringProperty('')
     text = None
     manager_open = False
@@ -47,7 +53,12 @@ class ImportText(Screen):
             select_path=self.select_path
         )
         self.file_manager.ext = ['.txt', '.pdf', '.mobi', '.epub', '.TXT', '.PDF', '.MOBI', '.EPUB']
-        self.file_manager.show('/')
+
+        # For PC:
+        # self.file_manager.show('/')
+        # For Android:
+        self.file_manager.show(self.primary_ext_storage)
+
         self.manager_open = True
 
     def select_path(self, path):
@@ -156,7 +167,7 @@ class ImportText(Screen):
         except AttributeError:
             return self.show_instructions('Please select text type.')
 
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('INSERT INTO texts (text_body) SELECT text_body FROM temp_data')
@@ -215,7 +226,7 @@ class ImportText(Screen):
 
     @staticmethod
     def update_text_preview():
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('SELECT * from temp_data')
@@ -225,7 +236,7 @@ class ImportText(Screen):
 
     @staticmethod
     def save_temp_data(text_body):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('CREATE TABLE IF NOT EXISTS temp_data (text_body text, id integer primary key )')
@@ -236,7 +247,7 @@ class ImportText(Screen):
 
     @staticmethod
     def clear_temp_database():
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
 
         cursor = connection.cursor()
         cursor.execute('DROP TABLE IF EXISTS temp_data')

@@ -1,3 +1,4 @@
+import os
 import json
 import sqlite3
 
@@ -16,7 +17,7 @@ class Preferences(Screen):
         self.bind(on_enter=trig)
 
     def custom_on_enter(self, *args):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
         cursor.execute('SELECT * from preferences')
 
@@ -47,7 +48,7 @@ class Preferences(Screen):
     def save_new_preferences(self):
         self.preferences_data['reading_speed'] = MDApp.get_running_app().root.get_screen('preferences').ids.reading_speed.text
 
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('DROP TABLE preferences')

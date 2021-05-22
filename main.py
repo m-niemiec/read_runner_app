@@ -1,6 +1,7 @@
-import sqlite3
 import os
+import sqlite3
 from functools import partial
+from shutil import copy
 
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -45,11 +46,6 @@ class MainScreen(Screen):
     preferences = None
     help = None
 
-    try:
-        pass
-    except sqlite3.OperationalError:
-        pass
-
     # Custom method 'on_enter' to make sure that all ids will be already generated.
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -59,11 +55,14 @@ class MainScreen(Screen):
     def custom_on_enter(self, *args):
         self.ids.container.clear_widgets()
 
-        # connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
-        sql_statement = 'SELECT * FROM texts'
-        cursor.execute(sql_statement)
+
+        try:
+            cursor.execute('SELECT * FROM texts')
+        except sqlite3.OperationalError:
+            copy('read_runner.db', os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir')))
+
         texts = cursor.fetchall()
 
         for text in texts:

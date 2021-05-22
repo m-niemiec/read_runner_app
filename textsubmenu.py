@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from kivy.uix.screenmanager import Screen
@@ -20,7 +21,7 @@ class TextSubMenu(Screen):
             self.custom_on_enter()
 
     def custom_on_enter(self):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
         cursor.execute('SELECT * from texts WHERE text_id = ?', (self.text_id,))
 
@@ -44,7 +45,7 @@ class TextSubMenu(Screen):
         self.delete_dialog.dismiss()
 
     def close_text_sub_menu_dialog(self, obj):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('UPDATE texts SET text_progress = ? WHERE text_id = ?', (self.text_progress, self.text_id))
@@ -56,7 +57,7 @@ class TextSubMenu(Screen):
         MDApp.get_running_app().root.get_screen('mainscreen').text_sub_menu_dialog.dismiss()
 
     def confirm_deletion(self, obj):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('DELETE FROM texts WHERE text_id = ?', (self.text_id, ))

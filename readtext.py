@@ -1,3 +1,4 @@
+import os
 import json
 import sqlite3
 
@@ -30,7 +31,7 @@ class ReadText(Screen):
             self.get_user_preferences()
 
     def get_text_data(self):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM texts WHERE text_id = (?)', (self.text_id, ))
         text_data = cursor.fetchone()
@@ -39,7 +40,7 @@ class ReadText(Screen):
         self.progress = text_data[2]
 
     def get_user_preferences(self):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
 
         cursor = connection.cursor()
         cursor.execute('SELECT * from preferences')
@@ -96,7 +97,7 @@ class ReadText(Screen):
             self.text_position_progress = 0
 
     def update_data_db(self):
-        connection = sqlite3.connect('read_runner.db')
+        connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
         cursor.execute('UPDATE texts SET text_position = (?) WHERE text_id = (?)', (self.text_position, self.text_id))

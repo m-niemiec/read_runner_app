@@ -2,6 +2,7 @@ import os
 import json
 import sqlite3
 
+from kivy.core.window import Window
 from kivy.properties import Clock
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
@@ -15,6 +16,8 @@ class Preferences(Screen):
 
         self._on_enter_trig = trig = Clock.create_trigger(self.custom_on_enter)
         self.bind(on_enter=trig)
+
+        Window.bind(on_keyboard=self.android_back_button)
 
     def custom_on_enter(self, *args):
         connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
@@ -57,6 +60,13 @@ class Preferences(Screen):
 
         connection.commit()
         connection.close()
+
+    @staticmethod
+    def android_back_button(window, key, *largs):
+        if key == 27:
+            MDApp.get_running_app().root.get_screen('preferences').manager.current = 'mainscreen'
+
+            return True
 
     @staticmethod
     def go_back():

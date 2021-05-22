@@ -8,6 +8,7 @@ from functools import partial
 import html2text
 import mobi
 import pdfplumber
+from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
@@ -46,6 +47,7 @@ class ImportText(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.clear_temp_database()
+        Window.bind(on_keyboard=self.android_back_button)
 
     def import_from_file(self):
         self.file_manager = MDFileManager(
@@ -253,6 +255,13 @@ class ImportText(Screen):
         cursor.execute('DROP TABLE IF EXISTS temp_data')
 
         connection.commit()
+
+    @staticmethod
+    def android_back_button(window, key, *largs):
+        if key == 27:
+            MDApp.get_running_app().root.get_screen('importtext').manager.current = 'mainscreen'
+
+            return True
 
     @staticmethod
     def go_back():

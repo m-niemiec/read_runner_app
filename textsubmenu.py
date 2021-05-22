@@ -1,6 +1,7 @@
 import os
 import sqlite3
 
+from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
@@ -15,6 +16,8 @@ class TextSubMenu(Screen):
 
     def __init__(self, text_id=None, **kwargs):
         super().__init__(**kwargs)
+
+        Window.bind(on_keyboard=self.android_back_button)
 
         if text_id:
             self.text_id = text_id
@@ -44,7 +47,7 @@ class TextSubMenu(Screen):
     def close_delete_dialog(self, obj=None):
         self.delete_dialog.dismiss()
 
-    def close_text_sub_menu_dialog(self, obj):
+    def close_text_sub_menu_dialog(self, obj=None):
         connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
         cursor = connection.cursor()
 
@@ -94,3 +97,9 @@ class TextSubMenu(Screen):
     def update_text_progress_label(self):
         MDApp.get_running_app().root.get_screen('mainscreen').textsubmenu.ids.progress_text.text = str(
             f'You changed your progress to {self.text_progress}% !')
+
+    def android_back_button(self, window, key, *largs):
+        if key == 27:
+            self.close_text_sub_menu_dialog()
+
+            return True

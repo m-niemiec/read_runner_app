@@ -32,7 +32,7 @@ List of changes made to source file of KivyMD:
 '''
 
 # Temp windows size hard coded for developing process.
-Window.size = (360, 780)
+# Window.size = (360, 780)
 
 
 class MainScreen(Screen):
@@ -51,6 +51,8 @@ class MainScreen(Screen):
         super().__init__(**kwargs)
         self._on_enter_trig = trig = Clock.create_trigger(self.custom_on_enter)
         self.bind(on_enter=trig)
+
+        Window.bind(on_keyboard=self.android_back_button)
 
     def custom_on_enter(self, *args):
         self.ids.container.clear_widgets()
@@ -125,6 +127,11 @@ class MainScreen(Screen):
         self.manager.current = 'help'
 
         self.help = Help()
+
+    @staticmethod
+    def android_back_button(window, key, *largs):
+        if key == 27:
+            return True
 
     @staticmethod
     def close_app():

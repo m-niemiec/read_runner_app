@@ -2,6 +2,7 @@ import os
 import json
 import sqlite3
 
+from kivy.core.window import Window
 from kivy.properties import Clock, StringProperty, NumericProperty
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
@@ -22,6 +23,8 @@ class ReadText(Screen):
 
     def __init__(self, text_id=None, **kwargs):
         super().__init__(**kwargs)
+
+        Window.bind(on_keyboard=self.android_back_button)
 
         if text_id:
             self.text_id = text_id
@@ -138,3 +141,10 @@ class ReadText(Screen):
 
         MDApp.get_running_app().root.get_screen('readtext').manager.transition.direction = 'right'
         MDApp.get_running_app().root.get_screen('readtext').manager.current = 'mainscreen'
+
+    @staticmethod
+    def android_back_button(window, key, *largs):
+        if key == 27:
+            MDApp.get_running_app().root.get_screen('readtext').manager.current = 'mainscreen'
+
+            return True

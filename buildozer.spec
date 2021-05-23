@@ -43,7 +43,7 @@ requirements = python3,kivy==2.0.0,sqlite3==3.35.5,kivymd,mobi,pdfplumber,html2t
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/read_runner_icon.png
+presplash.filename = %(source.dir)s/read_runner_loading.png
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/read_runner_icon.png
@@ -79,7 +79,7 @@ fullscreen = 0
 # red, blue, green, black, white, gray, cyan, magenta, yellow, lightgray,
 # darkgray, grey, lightgrey, darkgrey, aqua, fuchsia, lime, maroon, navy,
 # olive, purple, silver, teal.
-#android.presplash_color = #FFFFFF
+android.presplash_color = #303030
 
 # (string) Presplash animation using Lottie format.
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/

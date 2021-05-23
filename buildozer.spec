@@ -43,10 +43,10 @@ requirements = python3,kivy==2.0.0,sqlite3==3.35.5,kivymd,mobi,pdfplumber,html2t
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = %(source.dir)s/read_runner_icon.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/read_runner_icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -88,8 +88,8 @@ fullscreen = 0
 #android.presplash_lottie = "path/to/lottie/file.json"
 
 # (str) Adaptive icon of the application (used if Android API level is 26+ at runtime)
-#icon.adaptive_foreground.filename = %(source.dir)s/data/icon_fg.png
-#icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
+icon.adaptive_foreground.filename = %(source.dir)s/read_runner_icon.png
+icon.adaptive_background.filename = %(source.dir)s/read_runner_icon.png
 
 # (list) Permissions
 android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE

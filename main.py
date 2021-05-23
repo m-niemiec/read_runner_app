@@ -6,8 +6,8 @@ from shutil import copy
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import Clock
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.utils import platform
+from kivy.uix.screenmanager import Screen, ScreenManager, WipeTransition
+from kivy.utils import platform, get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
@@ -32,7 +32,7 @@ List of changes made to source file of KivyMD:
 '''
 
 # Temp windows size hard coded for developing process.
-# Window.size = (360, 780)
+Window.size = (360, 780)
 
 
 class MainScreen(Screen):
@@ -55,6 +55,8 @@ class MainScreen(Screen):
         Window.bind(on_keyboard=self.android_back_button)
 
     def custom_on_enter(self, *args):
+        self.manager.transition = WipeTransition(clearcolor=get_color_from_hex('#303030'), duration=0.2)
+
         self.ids.container.clear_widgets()
 
         connection = sqlite3.connect(os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir'), 'read_runner.db'))
@@ -82,7 +84,6 @@ class MainScreen(Screen):
             self.ids.container.add_widget(item)
 
     def import_text(self):
-        self.manager.transition.direction = 'left'
         self.manager.current = 'importtext'
 
         self.importtext = ImportText()
@@ -111,19 +112,16 @@ class MainScreen(Screen):
         self.help_dialog.dismiss()
 
     def select_text(self, text_id, obj):
-        self.manager.transition.direction = 'left'
         self.manager.current = 'readtext'
 
         self.readtext = ReadText(text_id=text_id)
 
     def view_preferences(self):
-        self.manager.transition.direction = 'left'
         self.manager.current = 'preferences'
 
         self.preferences = Preferences()
 
     def view_help(self):
-        self.manager.transition.direction = 'left'
         self.manager.current = 'help'
 
         self.help = Help()

@@ -47,6 +47,7 @@ class ImportText(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.clear_temp_database()
+
         Window.bind(on_keyboard=self.android_back_button)
 
     def import_from_file(self):

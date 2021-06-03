@@ -88,6 +88,7 @@ class ImportText(Screen):
         elif re.search(r'\S+.epub', text_file_path, re.IGNORECASE):
             self.import_epub_file(text_file_path)
         else:
+            self.text_loading_dialog.dismiss()
             self.show_error('Wrong file type selected. Please choose another one.')
 
     def import_txt_file(self, text_file_path):
@@ -226,6 +227,12 @@ class ImportText(Screen):
     def close_error_dialog(self, obj):
         self.error_dialog.dismiss()
 
+    def android_back_button(self, window, key, *largs):
+        if key == 27:
+            self.go_back()
+
+            return True
+
     @staticmethod
     def import_from_clipboard():
         imported_text = Clipboard.paste()
@@ -260,13 +267,6 @@ class ImportText(Screen):
         cursor.execute('DROP TABLE IF EXISTS temp_data')
 
         connection.commit()
-
-    @staticmethod
-    def android_back_button(window, key, *largs):
-        if key == 27:
-            MDApp.get_running_app().root.get_screen('importtext').manager.current = 'mainscreen'
-
-            return True
 
     @staticmethod
     def go_back():

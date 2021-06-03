@@ -9,10 +9,9 @@ class Help(Screen):
 
         Window.bind(on_keyboard=self.android_back_button)
 
-    @staticmethod
-    def android_back_button(window, key, *largs):
+    def android_back_button(self, window, key, *largs):
         if key == 27:
-            MDApp.get_running_app().root.get_screen('help').manager.current = 'mainscreen'
+            self.go_back()
 
             return True
 

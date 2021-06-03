@@ -79,13 +79,13 @@ class ImportText(Screen):
         self.file_manager.close()
 
     def determine_file_type(self, text_file_path):
-        if re.search(r'\S+.txt|\S+.TXT', text_file_path):
+        if re.search(r'\S+.txt', text_file_path, re.IGNORECASE):
             self.import_txt_file(text_file_path)
-        elif re.search(r'\S+.pdf|\S+.PDF', text_file_path):
+        elif re.search(r'\S+.pdf', text_file_path, re.IGNORECASE):
             self.import_pdf_file(text_file_path)
-        elif re.search(r'\S+.mobi|\S+.MOBI', text_file_path):
+        elif re.search(r'\S+.mobi', text_file_path, re.IGNORECASE):
             self.import_mobi_file(text_file_path)
-        elif re.search(r'\S+.epub|\S+.EPUB', text_file_path):
+        elif re.search(r'\S+.epub', text_file_path, re.IGNORECASE):
             self.import_epub_file(text_file_path)
         else:
             self.show_error('Wrong file type selected. Please choose another one.')
@@ -97,6 +97,7 @@ class ImportText(Screen):
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:1000]} ... '
 
         self.save_temp_data(new_text)
+
         self.text_loading_dialog.dismiss()
 
     def import_pdf_file(self, text_file_path, obj=None):
@@ -109,9 +110,9 @@ class ImportText(Screen):
 
                 self.text_loading.import_progress = f'Imported - {import_progress}%'
 
-                new_page = str(page.extract_text()).replace('\n', ' ')
+                new_text = str(page.extract_text()).replace('\n', ' ').encode('ascii', 'ignore').decode()
 
-                self.save_temp_data(new_page)
+                self.save_temp_data(new_text)
 
                 # We want to flush cache every loop to save as much RAM as possible.
                 page.flush_cache()
@@ -123,17 +124,19 @@ class ImportText(Screen):
         tempdir, filepath = mobi.extract(text_file_path)
 
         # If extracted MOBI file has extension TXT that means that everything worked properly.
-        if re.search(r'\S+.txt|\S+.TXT', filepath):
+        if re.search(r'\S+.txt|\S+.html', filepath, re.IGNORECASE):
             file = open(filepath, 'r', errors='ignore')
             content = file.read()
-            new_text = html2text.html2text(content.replace('\\n', ''))
+            new_text = html2text.html2text(content.replace('\\n', '')).encode('ascii', 'ignore').decode()
+
             self.save_temp_data(new_text)
+
             shutil.rmtree(tempdir, ignore_errors=True)
         # In other case (for example extracted file has EPUB format) that means that MOBI file was encrypted and
         # content will be corrupted.
         else:
             self.text_loading_dialog.dismiss()
-            self.show_error('The file provided cannot be processed. Please try another one.')
+            self.show_error('Something went wrong :( The file provided cannot be processed. Please try another one.')
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -149,7 +152,9 @@ class ImportText(Screen):
             self.text_loading.import_progress = f'Imported - {import_progress}%'
 
             if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                self.save_temp_data(html2text.html2text(str(item.get_content()).replace('\\n', '')))
+                new_text = html2text.html2text(str(item.get_content()).replace('\\n', '')).encode('ascii', 'ignore').decode()
+
+                self.save_temp_data(new_text)
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -211,7 +216,6 @@ class ImportText(Screen):
 
     def show_error(self, error_text):
         self.error_dialog = MDDialog(
-            title='Something went wrong :(',
             text=error_text,
             pos_hint={'center_x': 0.5, 'center_y': 0.5},
             size_hint=(0.9, 0.8),

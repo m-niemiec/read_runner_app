@@ -95,6 +95,7 @@ class MainScreen(Screen):
             type='custom',
             content_cls=self.textsubmenu,
             auto_dismiss=False,
+            size_hint_x=0.9,
             buttons=[MDFlatButton(text='CANCEL', on_release=self.textsubmenu.close_text_sub_menu_dialog)])
 
         self.text_sub_menu_dialog.open()

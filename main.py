@@ -66,6 +66,7 @@ class MainScreen(Screen):
             cursor.execute('SELECT * FROM texts')
         except sqlite3.OperationalError:
             copy('read_runner.db', os.path.join(getattr(MDApp.get_running_app(), 'user_data_dir')))
+            cursor.execute('SELECT * FROM texts')
 
         texts = cursor.fetchall()
 

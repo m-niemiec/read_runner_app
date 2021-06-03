@@ -6,7 +6,7 @@ from shutil import copy
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import Clock
-from kivy.uix.screenmanager import Screen, ScreenManager, WipeTransition
+from kivy.uix.screenmanager import Screen, WipeTransition
 from kivy.utils import platform, get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
@@ -32,7 +32,7 @@ List of changes made to source file of KivyMD:
 '''
 
 # Temp windows size hard coded for developing process.
-Window.size = (360, 780)
+# Window.size = (360, 780)
 
 
 class MainScreen(Screen):
@@ -152,12 +152,3 @@ class ReadRunnerApp(MDApp):
 
 if __name__ == '__main__':
     ReadRunnerApp().run()
-
-
-screen_manager = ScreenManager()
-screen_manager.add_widget(MainScreen(name='mainscreen'))
-screen_manager.add_widget(Preferences(name='preferences'))
-screen_manager.add_widget(ReadText(name='readtext'))
-screen_manager.add_widget(ImportText(name='importtext'))
-screen_manager.add_widget(TextSubMenu(name='textsubmenu'))
-screen_manager.add_widget(Help(name='help'))

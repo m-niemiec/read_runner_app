@@ -71,7 +71,12 @@ class ImportText(Screen):
         self.show_text_loading()
         self.exit_manager()
 
-        executor = ThreadPoolExecutor(5)
+        try:
+            thread_count = len(os.sched_getaffinity(0)) - 1 if len(os.sched_getaffinity(0)) > 3 else 3
+        except (AttributeError, NotImplementedError):
+            thread_count = os.cpu_count() - 1 if os.cpu_count() > 3 else 3
+
+        executor = ThreadPoolExecutor(thread_count)
         executor.submit(partial(self.determine_file_type, text_file_path))
 
     def exit_manager(self, *args):
@@ -105,13 +110,13 @@ class ImportText(Screen):
         pdf_page_count = len(pdfplumber.open(text_file_path).pages)
 
         with pdfplumber.open(text_file_path) as pdf:
-            for counter, page in enumerate(pdf.pages[:50], start=1):
+            for counter, page in enumerate(pdf.pages, start=1):
                 import_progress = '{:.2f}'.format(counter / pdf_page_count * 100)
                 counter += 1
 
                 self.text_loading.import_progress = f'Imported - {import_progress}%'
 
-                new_text = str(page.extract_text()).replace('\n', ' ').encode('ascii', 'ignore').decode()
+                new_text = str(page.extract_text()).replace('\n', ' ')
 
                 self.save_temp_data(new_text)
 
@@ -124,11 +129,11 @@ class ImportText(Screen):
     def import_mobi_file(self, text_file_path):
         tempdir, filepath = mobi.extract(text_file_path)
 
-        # If extracted MOBI file has extension TXT that means that everything worked properly.
+        # If extracted MOBI file has extension TXT or HTML that means that everything worked properly.
         if re.search(r'\S+.txt|\S+.html', filepath, re.IGNORECASE):
             file = open(filepath, 'r', errors='ignore')
             content = file.read()
-            new_text = html2text.html2text(content.replace('\\n', '')).encode('ascii', 'ignore').decode()
+            new_text = html2text.html2text(content.replace('\\n', ''))
 
             self.save_temp_data(new_text)
 
@@ -153,7 +158,7 @@ class ImportText(Screen):
             self.text_loading.import_progress = f'Imported - {import_progress}%'
 
             if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                new_text = html2text.html2text(str(item.get_content()).replace('\\n', '')).encode('ascii', 'ignore').decode()
+                new_text = html2text.html2text(str(item.get_content()).replace('\\n', ''))
 
                 self.save_temp_data(new_text)
 

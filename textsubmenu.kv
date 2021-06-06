@@ -18,11 +18,11 @@
             text: ''
 
         ThreeLineAvatarIconListItem:
-            pos_hint: {'x': -0.09, 'y': 0.5}
-            size_hint: (1.18, 1.0)
-            text: 'Change progress by 10%'
-            secondary_text: 'Left arrows go backward.'
-            tertiary_text: 'Right arrows go forward.'
+            pos_hint: {'x': -0.03, 'y': 0.5}
+            size_hint: (1.0, 1.0)
+            text: 'Change progress by:'
+            secondary_text: 'Left arrows -10%'
+            tertiary_text: 'Right arrows +10%'
             size_hint_y: None
 
             IconLeftWidget:
@@ -34,10 +34,10 @@
                 on_release: app.root.get_screen('mainscreen').textsubmenu.move_progress_forward()
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.09, 'y': 0.5}
-            size_hint: (1.18, 1.0)
+            pos_hint: {'x': -0.03, 'y': 0.5}
+            size_hint: (1.0, 1.0)
             text: 'Complete Text'
-            secondary_text: 'Set this text as read in 100%.'
+            secondary_text: 'Set text as read in 100%.'
             size_hint_y: None
             on_release: app.root.get_screen('mainscreen').textsubmenu.set_progress_as_completed()
 
@@ -45,10 +45,10 @@
                 icon: 'check'
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.09, 'y': 0.5}
-            size_hint: (1.18, 1.0)
+            pos_hint: {'x': -0.03, 'y': 0.5}
+            size_hint: (1.0, 1.0)
             text: 'Restart Text'
-            secondary_text: 'Go back to start, set text to 0%.'
+            secondary_text: 'Back to start, set to 0%.'
             size_hint_y: None
             on_release: app.root.get_screen('mainscreen').textsubmenu.set_progress_as_zero()
 
@@ -56,8 +56,8 @@
                 icon: 'restart'
 
         TwoLineIconListItem:
-            pos_hint: {'x': -0.09, 'y': 0.5}
-            size_hint: (1.18, 1.0)
+            pos_hint: {'x': -0.03, 'y': 0.5}
+            size_hint: (1.0, 1.0)
             text: 'Delete'
             secondary_text: 'Delete this text.'
             size_hint_y: None

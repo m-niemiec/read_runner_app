@@ -43,10 +43,10 @@ requirements = python3,kivy==2.0.0,sqlite3==3.35.5,kivymd,mobi,pdfplumber,html2t
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/read_runner_loading.png
+presplash.filename = %(source.dir)s/media/read_runner_loading.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/read_runner_icon.png
+icon.filename = %(source.dir)s/media/read_runner_icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait

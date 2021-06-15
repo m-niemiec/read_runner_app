@@ -27,6 +27,8 @@ class ReadText(Screen):
         Window.bind(on_keyboard=self.android_back_button)
 
         if text_id:
+            MDApp.get_running_app().root.get_screen('readtext').ids.text_word.text = '(press play)'
+
             self.text_id = text_id
 
             self.get_text_data()

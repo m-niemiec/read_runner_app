@@ -45,7 +45,6 @@ class ImportText(Screen):
     text_loading_dialog = None
     new_text = None
     text_loading = None
-    error_dialog = None
     pdf_page_count = 0
     import_progress = StringProperty('0%')
 
@@ -99,7 +98,7 @@ class ImportText(Screen):
             self.import_epub_file(text_file_path)
         else:
             self.text_loading_dialog.dismiss()
-            self.show_error('Wrong file type selected. Please choose another one.')
+            self.show_instructions('Wrong file type selected. Please choose another one.')
 
     def import_txt_file(self, text_file_path):
         with open(text_file_path, encoding='utf-8-sig') as file:
@@ -147,7 +146,7 @@ class ImportText(Screen):
         # content will be corrupted.
         else:
             self.text_loading_dialog.dismiss()
-            self.show_error('Something went wrong :( The file provided cannot be processed. Please try another one.')
+            self.show_instructions('Something went wrong :( The file provided cannot be processed. Please try another one.')
 
         self.update_text_preview()
         self.text_loading_dialog.dismiss()
@@ -224,18 +223,6 @@ class ImportText(Screen):
             auto_dismiss=False)
 
         self.text_loading_dialog.open()
-
-    def show_error(self, error_text):
-        self.error_dialog = MDDialog(
-            text=error_text,
-            pos_hint={'center_x': 0.5, 'center_y': 0.5},
-            size_hint=(0.9, 0.8),
-            buttons=[MDFlatButton(text='CANCEL', on_release=self.close_error_dialog)])
-
-        self.error_dialog.open()
-
-    def close_error_dialog(self, obj):
-        self.error_dialog.dismiss()
 
     def android_back_button(self, window, key, *largs):
         if key == 27:

@@ -5,11 +5,14 @@ import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 
+import ebooklib
 import html2text
 import mobi
 import pdfplumber
-from kivy.core.window import Window
+from ebooklib import epub
+from jnius import autoclass
 from kivy.core.clipboard import Clipboard
+from kivy.core.window import Window
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
 from kivy.utils import platform
@@ -19,11 +22,13 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
 
-import ebooklib
-from ebooklib import epub
-
+# Getting storage path with pyjnius for better compatibility with different Android versions
 if platform == 'android':
-    from android.storage import primary_external_storage_path
+    Env = autoclass('android.os.Environment')
+    _external_storage_path = Env.getExternalStoragePublicDirectory(Env.DIRECTORY_DOWNLOADS).getPath()
+    data_dir = _external_storage_path
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
 
 
 class TextLoading(Screen):
@@ -31,7 +36,7 @@ class TextLoading(Screen):
 
 
 class ImportText(Screen):
-    primary_ext_storage = primary_external_storage_path()
+    primary_ext_storage = data_dir
     imported_text = StringProperty('')
     text = None
     manager_open = False

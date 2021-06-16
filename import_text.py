@@ -36,7 +36,7 @@ class TextLoading(Screen):
 
 
 class ImportText(Screen):
-    primary_ext_storage = data_dir
+    # primary_ext_storage = data_dir
     imported_text = StringProperty('')
     text = None
     manager_open = False
@@ -62,18 +62,22 @@ class ImportText(Screen):
         self.file_manager.ext = ['.txt', '.pdf', '.mobi', '.epub', '.TXT', '.PDF', '.MOBI', '.EPUB']
 
         # For PC:
-        # self.file_manager.show('/')
+        self.file_manager.show('/')
         # For Android:
-        self.file_manager.show(self.primary_ext_storage)
+        # self.file_manager.show(self.primary_ext_storage)
 
         self.manager_open = True
 
     def select_path(self, path):
+        self.exit_manager()
+
         text_file_path = path
         toast(text_file_path)
 
-        self.show_text_loading()
-        self.exit_manager()
+        if re.search(r'\S+.txt|\S+.pdf|\S+.mobi|\S+.epub', text_file_path, re.IGNORECASE):
+            self.show_text_loading()
+        else:
+            return self.show_instructions('Wrong file type selected. Please choose another one.')
 
         try:
             thread_count = len(os.sched_getaffinity(0)) - 1 if len(os.sched_getaffinity(0)) > 3 else 3
@@ -96,9 +100,6 @@ class ImportText(Screen):
             self.import_mobi_file(text_file_path)
         elif re.search(r'\S+.epub', text_file_path, re.IGNORECASE):
             self.import_epub_file(text_file_path)
-        else:
-            self.text_loading_dialog.dismiss()
-            self.show_instructions('Wrong file type selected. Please choose another one.')
 
     def import_txt_file(self, text_file_path):
         with open(text_file_path, encoding='utf-8-sig') as file:
@@ -106,9 +107,9 @@ class ImportText(Screen):
 
         MDApp.get_running_app().root.get_screen("importtext").ids.imported_text_field.text = f'{new_text[:1000]} ... '
 
-        self.save_temp_data(new_text)
-
         self.text_loading_dialog.dismiss()
+
+        self.save_temp_data(new_text)
 
     def import_pdf_file(self, text_file_path, obj=None):
         pdf_page_count = len(pdfplumber.open(text_file_path).pages)

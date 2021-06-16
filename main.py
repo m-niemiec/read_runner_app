@@ -15,10 +15,10 @@ from kivymd.uix.list import IconLeftWidget, IconRightWidget, ThreeLineAvatarIcon
 
 import helper_texts
 from help import Help
-from importtext import ImportText
+from import_text import ImportText
 from preferences import Preferences
-from readtext import ReadText
-from textsubmenu import TextSubMenu
+from read_text import ReadText
+from text_sub_menu import TextSubMenu
 
 # Ask for necessary permissions while running on android platform.
 if platform == 'android':
@@ -26,7 +26,7 @@ if platform == 'android':
     request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 '''
-Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (currently from pip, NOT from master branch on GitHub).
+Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1.
 List of changes made to source file of KivyMD:
     - dialog.py - lines 504 and 507. Changed width values to fix problem with custom type MDDialog.
 '''

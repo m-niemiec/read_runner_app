@@ -36,6 +36,7 @@ class TextLoading(Screen):
 
 
 class ImportText(Screen):
+    # For Android:
     # primary_ext_storage = data_dir
     imported_text = StringProperty('')
     text = None

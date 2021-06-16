@@ -26,9 +26,7 @@ if platform == 'android':
     request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 '''
-Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1.
-List of changes made to source file of KivyMD:
-    - dialog.py - lines 504 and 507. Changed width values to fix problem with custom type MDDialog.
+Read Runner app works best on Kivy 2.0.0 and kivymd 0.104.1 (newer versions may break UI)
 '''
 
 # Temp windows size hard coded for developing process.

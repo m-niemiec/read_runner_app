@@ -18,5 +18,5 @@ Pygments==2.8.1
 requests==2.25.1
 six==1.16.0
 sortedcontainers==2.3.0
-urllib3==1.26.4
+urllib3>=1.26.5
 Wand==0.6.6

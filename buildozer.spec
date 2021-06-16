@@ -28,7 +28,7 @@ source.include_exts = py,png,jpg,kv,atlas,db
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 1.0
+version = 1.4
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -36,7 +36,7 @@ version = 1.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.0.0,sqlite3==3.35.5,kivymd,mobi,pdfplumber,html2text,ebooklib,loguru,pdfminer,PIL,lxml
+requirements = python3,kivy==2.0.0,sqlite3==3.35.5,kivymd==0.104.1,mobi,pdfplumber,html2text,ebooklib,loguru,pdfminer,PIL,lxml
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -243,7 +243,7 @@ android.arch = arm64-v8a
 
 # (int) overrides automatic versionCode computation (used in build.gradle)
 # this is not the same as app version and should only be edited if you know what you're doing
-# android.numeric_version = 1
+android.numeric_version = 831102
 
 # (bool) enables Android auto backup feature (Android API >=23)
 android.allow_backup = True

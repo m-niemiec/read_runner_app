@@ -7,7 +7,7 @@ With the help of Kivy, KivyMD, SQLite3 and of course Python (and some other pack
 <br><br>
 After I finished up with coding I built it for Android using Buildozer running on a VM with Linux.
 <br><br>
-Here is a link to the - <a href="https://play.google.com/store/apps/details?id=org.michalniemiec.read_runner" target="_blank">‘Read Runner’ on Google Play Store</a>
+Read Runner App was available on official Google Play Store for a couple of years.
 <br><br>
 Cheers!
 <br><br>
